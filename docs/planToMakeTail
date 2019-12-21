@@ -1,0 +1,349 @@
+*Ways to run the program--
+1. node tail.js a.txt
+2. node tail.js -n 2 a.txt
+3. node tail.js -r a.txt
+4. node tail.js -r -n 1 a.txt
+3. cat a.txt | tail.js 
+4. cat a.txt | tail.js -n 4
+7. cat a.txt | tail.js -r a.txt
+8. cat a.txt | tail.js -r -n 5 a.txt
+9. node tail.js a.txt b.txt
+//10.node tail.js -q a.txt b.txt
+
+
+Flow of making tail command---
+A.first flow => if the line number does not given By user
+------------------------------------------------------
+        a.txt
+ee
+ff
+gg
+hh
+ii
+jj
+kk
+ll
+mm
+nn
+------------------------------------------------------
+               Expectation 1 (if the file exists)
+
+>Input => node tail.js a.txt
+>Output => 
+ee
+ff
+gg
+hh
+ii
+jj
+kk 
+ll 
+mm
+nn
+------------------------------------------------------
+                   Expectation 2(if file a.txt does not exists)
+
+>Input => node tail.js a.txt
+>Output => error: no such file or directory   
+
+**************************************************************
+
+B.Second flow =>if the line number is given by the user
+------------------------------------------------------
+         a.txt
+ff
+gg
+hh
+ii
+jj
+kk
+ll
+mm
+nn
+-------------------------------------------------------
+                  Expectation 3(if file is available)
+        
+>Input => node tail.js -n 5 a.txt 
+>Output => 
+jj
+kk
+ll
+mm
+nn
+-------------------------------------------------------
+                 Expectation 4(if file has less lines than required)
+        
+>Input => node tail.js -n 16 a.txt 
+>Output => 
+ff
+gg
+hh
+ii
+jj
+kk
+ll
+mm
+nn
+********************************************************************
+
+C.Third flow =>if the content comes from standard input
+            
+ ------------------------------------------------------
+                a.txt
+aa
+bb
+cc
+dd
+ee
+ff
+-------------------------------------------------------
+
+                Expectation 5 (no of lines is not specified)
+
+>input => cat a.text | tail 
+>Output =>
+aa
+bb
+cc
+dd
+ee
+ff
+--------------------------------------------------------
+
+                 Expectation 6(no of lines is specified)
+>input => cat a.text | tail -n 3
+>Output =>
+dd
+ee
+ff
+******************************************************************
+
+D.Forth flow - when -r option is present
+
+ ------------------------------------------------------
+                a.txt
+aa
+bb
+cc
+dd
+ee
+ff
+-------------------------------------------------------
+
+                Expectation 7 (no of lines is not specified)
+
+>input => tail.js -r a.txt
+>Output =>
+ff
+ee
+dd
+cc
+bb
+aa
+---------------------------------------------------------
+
+                 Expectation 8 (no of lines is specified)
+
+>input => cat a.text | tail -n 3
+>Output =>
+ff
+ee
+dd
+******************************************************************
+
+
+E.Fifth flow - if more than one file is given 
+                 
+------------------------------------------------------
+                a.txt
+aa
+bb
+cc
+dd
+ee
+ff
+------------------------------------------------------
+                b.txt
+ee
+ff
+jj
+kk
+--------------------------------------------------------
+              Expectation 9  (no of lines is not specified)
+>input => tail a.txt b.txt
+>Output =>
+==>a.txt<==
+aa
+bb
+cc
+dd
+ee
+ff
+==>b.txt<==
+ee
+ff
+jj
+kk
+-------------------------------------------------------
+               Expectation 10 (no of lines is specified)
+>input => tail -n 3 a.txt b.txt
+>Output =>
+==>a.txt<==
+dd
+ee
+ff
+==>b.txt<==
+ff
+jj
+kk
+--------------------------------------------------------
+                
+******************************************************************
+
+
+
+Flow of code
+-------------
+1 => displayMessage
+1.1
+input:"aa\nbb\ncc\ndd\nee\nff\ngg\nhh\nii\njj"
+type: string
+name:contentToPrint
+Output :
+aa
+bb
+cc
+dd
+ee
+ff
+gg
+hh
+ii
+jj 
+type:string
+1.2 Note: if output comes from stderr
+Output :
+tail : a.txt: no such file or directory
+type : string
+
+
+----------------------------------------------------------
+
+2 => formatTheContent
+2.1
+input:["aa","bb","cc","dd","ee",ff","gg","hh","ii","jj"]
+type : array of string
+name: lastNLines
+Output : "aa\nbb\ncc\ndd\nee\nff\ngg\nhh\nii\njj"
+type:string
+name:contentToPrint
+2.1D
+input :["aa","bb","cc","dd","ee",ff","gg","hh","ii","jj"],-r
+type : array of string,string
+name: lastNLines,option
+Output : "jj\nii\nhh\ngg\nee\ndd\ncc\nbb\naa"
+type:string
+name:contentToPrint
+
+----------------------------------------------------------
+
+3 => selectLastNLines
+3.1
+input :{content:"kk\nll\nmm\nnn\naa\nbb\ncc\ndd\nee\nff\ngg\nhh\nii\njj", noOfLines:10}
+type:object
+name:contentAndLines
+output:["aa","bb","cc","dd","ee",ff","gg","hh","ii","jj"]
+type: array of string
+name:LastNLines
+3.1C input : stdin,{content: undefined,noOfLines : 10}
+type : string,object
+output : ["aa","bb","cc","dd","ee"]
+type : array of string
+name : LastNLines
+
+---------------------------------------------------------
+
+4 => loadFile
+4.1 => if file is present-->
+input :["a.txt"]
+type : array of string
+name :filePath
+output :"aa\nbb\ncc\ndd\nee\nff\ngg\nhh\nii\njj\nkk\nll\nmm\nnn"
+type :string
+name : fileContent
+4.1E ==> if more that one file-->
+input :["a.txt",b.txt]
+type : array of strings
+name :filePath
+output :"==>a.txt<==\naa\nbb\ncc\ndd\nee\nff\n==>b.txt<==\nee\nff\njj\nkk"
+type :string
+name : content
+4.2 => if file is not present-->
+output : "tail : a.txt: no such file or directory"
+type : stderr
+
+-----------------------------------------------------------
+
+5 => parseArgument
+5.A
+input : ["node,"tail.js","a.txt"]
+type : array of string
+name : commandLineArgs
+output :{fileName:["a.txt"],noOfLines:"10"}
+type : object
+name :filePathAndLines
+
+5.B
+input : ["node,"tail.js","-n","5","a.txt"]
+type : array of string
+name : commandLineArgs
+output :{fileName:["a.txt"],noOfLines:"5"}
+type : object
+name :filePathAndLines
+
+5.C
+(1)input : ["cat","a.txt","node","tail.js"]
+type : array of string 
+name : commandLineArgs
+output : {fileName:undefined,noOfLines:10}
+type : object
+name :filePathAndLines
+
+(2)input : ["cat","a.txt","node","tail.js","-n",3]
+type : array of string 
+name : commandLineArgs
+output : {fileName:undefined,noOfLines:3}
+type : object
+name :filePathAndLines
+
+5.D
+(1)input : ["node","tail.js","-r","a.txt"]
+type : array of string 
+name : commandLineArgs
+output : {fileName:[a.txt],noOfLines:10,option:-r}
+type : object
+name :filePathAndLines
+
+(2)input : ["node","tail.js","-r","-n",5,"a.txt"]
+type : array of string 
+name : commandLineArgs
+output : {fileName:[a.txt],noOfLines:5,option:-r}
+type : object
+name :filePathAndLines
+
+5.E
+(1)input : ["node","tail.js","a.txt","b.txt"]
+type : array of string 
+name : commandLineArgs
+output : {fileName:[a.txt,b.txt],noOfLines:5,option:-r}
+type : object
+name :filePathAndLines
+
+-----------------------------------------------------------
+
+
+
+
+
+
+
