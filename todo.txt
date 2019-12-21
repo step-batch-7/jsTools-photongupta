@@ -1,0 +1,61 @@
+Todo list for first expectation --
+A.first flow => if the line number does not given By user
+------------------------------------------------------
+        a.txt
+cc        
+dd
+ee
+ff
+gg
+hh
+ii
+jj
+kk
+ll
+mm
+nn
+------------------------------------------------------
+a.1 if file exists
+Input - node tail.js a.txt
+Output - 
+ee
+ff
+gg
+hh
+ii
+jj
+kk
+ll
+mm
+nn
+------------------------------------------------------
+a.2 if file a.txt does not exists 
+
+>Input => node tail.js a.txt
+>Output => tail : error: no such file or directory   
+------------------------------------------------------
+
+
+
+
+=>make following folders and file-
+tail.js
+source folder -> src
+tailLib.js
+test folder -> test
+testTail.js
+
+=>parseArgument function
+
+=>loadFile function
+
+=>selectLast10Lines function 
+
+=>formatContent function 
+
+=>displayContent
+
+
+
+
+
