@@ -1,5 +1,9 @@
-const { formatContent, selectLast10Lines } = require("../src/tailLib");
 const assert = require("assert");
+const {
+  formatContent,
+  selectLast10Lines,
+  loadFile
+} = require("../src/tailLib");
 
 describe("formatContent", function() {
   it("should format the content in appropriate form", function() {
@@ -17,5 +21,17 @@ describe("selectLast10Lines", function() {
     });
     const expected = ["d", "e", "f", "g", "h", "i", "j", "k", "l", "m"];
     assert.deepStrictEqual(actual, expected);
+  });
+});
+
+describe("loadFile", function() {
+  it("should load the file content if given file is present", function() {
+    const filePath = "README.md";
+    assert.strictEqual(loadFile(filePath), "# jsTools-photongupta\n");
+  });
+
+  it("should throw the error if given file is not present", function() {
+    const filePath = "abc.txt";
+    assert.throws(() => loadFile(filePath), Error);
   });
 });
