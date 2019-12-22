@@ -1,6 +1,10 @@
 const fs = require("fs");
-const { getFileOperations, doesFileExist } = require("../src/utilities");
 const assert = require("chai").assert;
+const {
+  getFileOperations,
+  doesFileExist,
+  readFile
+} = require("../src/utilities");
 
 describe("getFileOperations", function() {
   it("should give an object that will contain all required tools for file processing.", function() {
@@ -27,5 +31,49 @@ describe("doesFileExists", function() {
       existsFile: existsFile
     };
     assert.isTrue(doesFileExist(fileOperation));
+  });
+
+  it("should not validate if given file does not exists", function() {
+    const existsFile = function(path) {
+      assert.strictEqual(path, "path");
+      return false;
+    };
+    const fileOperation = {
+      path: "path",
+      encoding: "utf8",
+      existsFile: existsFile
+    };
+    assert.isFalse(doesFileExist(fileOperation));
+  });
+});
+
+describe("readFile", function() {
+  it("should read given file and give the content of file", function() {
+    const read = function(path, encoding) {
+      assert.strictEqual(path, "path");
+      assert.strictEqual(encoding, "utf8");
+      return "hello";
+    };
+    const fileOperation = {
+      path: "path",
+      encoding: "utf8",
+      reader: read
+    };
+
+    assert.strictEqual(readFile(fileOperation), "hello");
+  });
+
+  it("should give empty string if file is empty", function() {
+    const read = function(path, encoding) {
+      assert.strictEqual(path, "path");
+      assert.strictEqual(encoding, "utf8");
+      return "";
+    };
+    const fileOperation = {
+      path: "path",
+      encoding: "utf8",
+      reader: read
+    };
+    assert.strictEqual(readFile(fileOperation), "");
   });
 });

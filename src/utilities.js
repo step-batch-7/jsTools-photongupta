@@ -14,4 +14,12 @@ const doesFileExist = function(fileOperations) {
   return fileOperations.existsFile(fileOperations.path);
 };
 
-module.exports = { getFileOperations, doesFileExist };
+const readFile = function(fileOperations) {
+  let content = fileOperations.reader(
+    fileOperations.path,
+    fileOperations.encoding
+  );
+  return content;
+};
+
+module.exports = { getFileOperations, doesFileExist, readFile };
