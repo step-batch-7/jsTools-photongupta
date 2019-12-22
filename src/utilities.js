@@ -10,4 +10,8 @@ const getFileOperations = function(filePath) {
   return fileOperations;
 };
 
-module.exports = { getFileOperations };
+const doesFileExist = function(fileOperations) {
+  return fileOperations.existsFile(fileOperations.path);
+};
+
+module.exports = { getFileOperations, doesFileExist };
