@@ -3,7 +3,7 @@ const assert = require("chai").assert;
 const {
   getFileOperations,
   doesFileExist,
-  readFile
+  loadFile
 } = require("../src/utilities");
 
 describe("getFileOperations", function() {
@@ -12,7 +12,7 @@ describe("getFileOperations", function() {
     const expected = {
       path: "path",
       encoding: "utf8",
-      reader: fs.readFileSync,
+      reader: fs.loadFileSync,
       existsFile: fs.existsSync
     };
     assert.deepStrictEqual(actual, expected);
@@ -47,7 +47,7 @@ describe("doesFileExists", function() {
   });
 });
 
-describe("readFile", function() {
+describe("loadFile", function() {
   it("should read given file and give the content of file", function() {
     const read = function(path, encoding) {
       assert.strictEqual(path, "path");
@@ -60,7 +60,7 @@ describe("readFile", function() {
       reader: read
     };
 
-    assert.strictEqual(readFile(fileOperation), "hello");
+    assert.strictEqual(loadFile(fileOperation), "hello");
   });
 
   it("should give empty string if file is empty", function() {
@@ -74,6 +74,6 @@ describe("readFile", function() {
       encoding: "utf8",
       reader: read
     };
-    assert.strictEqual(readFile(fileOperation), "");
+    assert.strictEqual(loadFile(fileOperation), "");
   });
 });

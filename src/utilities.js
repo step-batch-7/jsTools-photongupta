@@ -4,7 +4,7 @@ const getFileOperations = function(filePath) {
   let fileOperations = {
     path: filePath,
     encoding: "utf8",
-    reader: fs.readFileSync,
+    reader: fs.loadFileSync,
     existsFile: fs.existsSync
   };
   return fileOperations;
@@ -14,7 +14,7 @@ const doesFileExist = function(fileOperations) {
   return fileOperations.existsFile(fileOperations.path);
 };
 
-const readFile = function(fileOperations) {
+const loadFile = function(fileOperations) {
   let content = fileOperations.reader(
     fileOperations.path,
     fileOperations.encoding
@@ -22,4 +22,4 @@ const readFile = function(fileOperations) {
   return content;
 };
 
-module.exports = { getFileOperations, doesFileExist, readFile };
+module.exports = { getFileOperations, doesFileExist, loadFile };

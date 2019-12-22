@@ -47,11 +47,13 @@ testTail.js
 
 =>parseArgument function
 
---working on--loadFile function
+--done--loadFile function
 
 --done--selectLast10Lines function 
 
 --done--formatContent function 
+
+--done--performTailOperation function
 
 =>implement main
 

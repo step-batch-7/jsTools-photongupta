@@ -2,7 +2,7 @@ const assert = require("assert");
 const {
   formatContent,
   selectLast10Lines,
-  loadFile
+  performTailOperation
 } = require("../src/tailLib");
 
 describe("formatContent", function() {
@@ -19,7 +19,7 @@ describe("selectLast10Lines", function() {
       content: "a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk\nl\nm",
       noOfLines: 10
     });
-    const expected = ["d", "e", "f", "g", "h", "i", "j", "k", "l", "m"];
+    const expected = "d\ne\nf\ng\nh\ni\nj\nk\nl\nm";
     assert.deepStrictEqual(actual, expected);
   });
 
@@ -28,19 +28,22 @@ describe("selectLast10Lines", function() {
       content: "c\nd\ne\nf",
       noOfLines: 10
     });
-    const expected = ["c", "d", "e", "f"];
+    const expected = "c\nd\ne\nf";
     assert.deepStrictEqual(actual, expected);
   });
 });
 
-describe("loadFile", function() {
+describe("performTailOperation", function() {
   it("should load the file content if given file is present", function() {
     const filePath = "README.md";
-    assert.strictEqual(loadFile(filePath), "# jsTools-photongupta\n");
+    assert.strictEqual(
+      performTailOperation(filePath),
+      "# jsTools-photongupta\n"
+    );
   });
 
   it("should throw the error if given file is not present", function() {
     const filePath = "abc.txt";
-    assert.throws(() => loadFile(filePath), Error);
+    assert.throws(() => performTailOperation(filePath), Error);
   });
 });
