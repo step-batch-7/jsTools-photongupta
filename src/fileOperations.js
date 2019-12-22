@@ -1,8 +1,8 @@
 const fs = require("fs");
 
-const getFileOperations = function(filePath) {
+const getFileOperations = function(userOptions) {
   let fileOperations = {
-    path: filePath,
+    path: userOptions.filePath,
     encoding: "utf8",
     reader: fs.readFileSync,
     existsFile: fs.existsSync

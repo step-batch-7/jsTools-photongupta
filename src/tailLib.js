@@ -5,7 +5,7 @@ const {
 } = require("./fileOperations");
 
 const parseArguments = function(cmdLineArgs) {
-  return cmdLineArgs[2];
+  return { filePath: cmdLineArgs[2], noOfLines: 10 };
 };
 
 const formatContent = function(last10Lines) {
@@ -19,15 +19,15 @@ const selectLast10Lines = function(contentAndNoOfLines) {
   return formatContent(last10Lines);
 };
 
-const performTailOperation = function(filePath) {
-  const fileOperations = getFileOperations(filePath);
+const performTailOperation = function(userOptions) {
+  const fileOperations = getFileOperations(userOptions);
   if (doesFileExist(fileOperations)) {
     const content = loadFile(fileOperations);
-    const contentAndNoOfLines = { content: content, noOfLines: 10 };
-    const contentToPrint = selectLast10Lines(contentAndNoOfLines);
+    userOptions.content = content;
+    const contentToPrint = selectLast10Lines(userOptions);
     return contentToPrint;
   }
-  throw new Error(`tail: ${filePath}: No such file or directory`);
+  throw new Error(`tail: ${userOptions.filePath}: No such file or directory`);
 };
 
 module.exports = {

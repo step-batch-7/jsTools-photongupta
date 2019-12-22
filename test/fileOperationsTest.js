@@ -8,7 +8,7 @@ const {
 
 describe("getFileOperations", function() {
   it("should give an object that will contain all required tools for file processing.", function() {
-    const actual = getFileOperations("path");
+    const actual = getFileOperations({ filePath: "path" });
     const expected = {
       path: "path",
       encoding: "utf8",

@@ -55,7 +55,7 @@ testTail.js
 
 --done--performTailOperation function
 
-=>implement main
+--done--implement main
 
 
 

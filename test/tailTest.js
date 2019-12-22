@@ -36,7 +36,10 @@ describe("selectLast10Lines", function() {
 
 describe("performTailOperation", function() {
   it("should load the file content if given file is present", function() {
-    const filePath = "README.md";
+    const filePath = {
+      filePath: "README.md",
+      noOfLines: 10
+    };
     assert.strictEqual(
       performTailOperation(filePath),
       "# jsTools-photongupta\n"
@@ -51,9 +54,9 @@ describe("performTailOperation", function() {
 
 describe("parseArguments", function() {
   it("should give the fileName from command line arguments", function() {
-    assert.deepStrictEqual(
-      parseArguments(["node", "tail.js", "a.txt"]),
-      "a.txt"
-    );
+    assert.deepStrictEqual(parseArguments(["node", "tail.js", "a.txt"]), {
+      filePath: "a.txt",
+      noOfLines: 10
+    });
   });
 });
