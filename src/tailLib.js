@@ -1,4 +1,12 @@
-const { getFileOperations, doesFileExist, loadFile } = require("./utilities");
+const {
+  getFileOperations,
+  doesFileExist,
+  loadFile
+} = require("./fileOperations");
+
+const parseArguments = function(cmdLineArgs) {
+  return cmdLineArgs[2];
+};
 
 const formatContent = function(last10Lines) {
   return last10Lines.join("\n");
@@ -22,4 +30,9 @@ const performTailOperation = function(filePath) {
   throw new Error(`tail: ${filePath}: No such file or directory`);
 };
 
-module.exports = { formatContent, selectLast10Lines, performTailOperation };
+module.exports = {
+  formatContent,
+  selectLast10Lines,
+  performTailOperation,
+  parseArguments
+};

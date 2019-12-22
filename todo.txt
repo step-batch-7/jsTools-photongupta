@@ -45,7 +45,7 @@ tailLib.js
 test folder -> test
 testTail.js
 
-=>parseArgument function
+--done--parseArgument function
 
 --done--loadFile function
 

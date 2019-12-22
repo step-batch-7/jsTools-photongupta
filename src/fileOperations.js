@@ -4,7 +4,7 @@ const getFileOperations = function(filePath) {
   let fileOperations = {
     path: filePath,
     encoding: "utf8",
-    reader: fs.loadFileSync,
+    reader: fs.readFileSync,
     existsFile: fs.existsSync
   };
   return fileOperations;

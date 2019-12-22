@@ -4,7 +4,7 @@ const {
   getFileOperations,
   doesFileExist,
   loadFile
-} = require("../src/utilities");
+} = require("../src/fileOperations");
 
 describe("getFileOperations", function() {
   it("should give an object that will contain all required tools for file processing.", function() {
@@ -12,7 +12,7 @@ describe("getFileOperations", function() {
     const expected = {
       path: "path",
       encoding: "utf8",
-      reader: fs.loadFileSync,
+      reader: fs.readFileSync,
       existsFile: fs.existsSync
     };
     assert.deepStrictEqual(actual, expected);

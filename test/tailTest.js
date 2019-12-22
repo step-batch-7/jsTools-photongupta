@@ -2,7 +2,8 @@ const assert = require("assert");
 const {
   formatContent,
   selectLast10Lines,
-  performTailOperation
+  performTailOperation,
+  parseArguments
 } = require("../src/tailLib");
 
 describe("formatContent", function() {
@@ -45,5 +46,14 @@ describe("performTailOperation", function() {
   it("should throw the error if given file is not present", function() {
     const filePath = "abc.txt";
     assert.throws(() => performTailOperation(filePath), Error);
+  });
+});
+
+describe("parseArguments", function() {
+  it("should give the fileName from command line arguments", function() {
+    assert.deepStrictEqual(
+      parseArguments(["node", "tail.js", "a.txt"]),
+      "a.txt"
+    );
   });
 });
