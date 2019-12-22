@@ -38,7 +38,7 @@ a.2 if file a.txt does not exists
 
 
 
-=>make following folders and file-
+--done--make following folders and file-
 tail.js
 source folder -> src
 tailLib.js
@@ -47,13 +47,13 @@ testTail.js
 
 =>parseArgument function
 
-=>loadFile function
+--working on--loadFile function
 
-=>selectLast10Lines function 
+--done--selectLast10Lines function 
 
-=>formatContent function 
+--done--formatContent function 
 
-=>displayContent
+=>implement main
 
 
 
