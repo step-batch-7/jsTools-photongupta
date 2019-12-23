@@ -36,19 +36,19 @@ describe("selectLast10Lines", function() {
 
 describe("performTailOperation", function() {
   it("should load the file content if given file is present", function() {
-    const filePath = {
+    const userOptions = {
       filePath: "README.md",
       noOfLines: 10
     };
     assert.strictEqual(
-      performTailOperation(filePath),
+      performTailOperation(userOptions),
       "# jsTools-photongupta\n"
     );
   });
 
   it("should throw the error if given file is not present", function() {
-    const filePath = "abc.txt";
-    assert.throws(() => performTailOperation(filePath), Error);
+    const userOptions = "abc.txt";
+    assert.throws(() => performTailOperation(userOptions), Error);
   });
 });
 
