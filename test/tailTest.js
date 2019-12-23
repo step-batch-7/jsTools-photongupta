@@ -37,18 +37,54 @@ describe("selectLast10Lines", function() {
 describe("performTailOperation", function() {
   it("should load the file content if given file is present", function() {
     const userOptions = {
-      filePath: "README.md",
+      filePath: "path",
       noOfLines: 10
     };
+    const read = function(path, encoding) {
+      assert.strictEqual(path, "path");
+      assert.strictEqual(encoding, "utf8");
+      return "a\nb";
+    };
+    const existsFile = function(path) {
+      assert.strictEqual(path, "path");
+      return true;
+    };
+    const fileOperation = {
+      path: "path",
+      encoding: "utf8",
+      reader: read,
+      existsFile: existsFile
+    };
     assert.strictEqual(
-      performTailOperation(userOptions),
-      "# jsTools-photongupta\n"
+      performTailOperation(userOptions, fileOperation),
+      "a\nb"
     );
   });
 
   it("should throw the error if given file is not present", function() {
-    const userOptions = "abc.txt";
-    assert.throws(() => performTailOperation(userOptions), Error);
+    const userOptions = {
+      filePath: "path",
+      noOfLines: 10
+    };
+    const read = function(path, encoding) {
+      assert.strictEqual(path, "path");
+      assert.strictEqual(encoding, "utf8");
+      return "a\nb";
+    };
+    const existsFile = function(path) {
+      assert.strictEqual(path, "path");
+      return false;
+    };
+    const fileOperation = {
+      path: "path",
+      encoding: "utf8",
+      reader: read,
+      existsFile: existsFile
+    };
+    assert.throws(
+      () => performTailOperation(userOptions, fileOperation),
+      Error
+    );
   });
 });
 

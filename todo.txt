@@ -57,7 +57,9 @@ testTail.js
 
 --done--implement main
 
-
+Todo list for second expectation -- 
+1. input validation
+2. refactor parseArgument
 
 
 

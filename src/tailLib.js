@@ -19,8 +19,7 @@ const selectLast10Lines = function(contentAndNoOfLines) {
   return formatContent(last10Lines);
 };
 
-const performTailOperation = function(userOptions) {
-  const fileOperations = getFileOperations(userOptions);
+const performTailOperation = function(userOptions, fileOperations) {
   if (doesFileExist(fileOperations)) {
     const content = loadFile(fileOperations);
     userOptions.content = content;
