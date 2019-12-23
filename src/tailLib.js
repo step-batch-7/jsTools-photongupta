@@ -1,11 +1,33 @@
-const {
-  getFileOperations,
-  doesFileExist,
-  loadFile
-} = require("./fileOperations");
-
 const parseArguments = function(cmdLineArgs) {
-  return { filePath: cmdLineArgs[2], noOfLines: 10 };
+  const userOptions = {
+    filePath: undefined,
+    option: [],
+    noOfLines: 10
+  };
+  if (cmdLineArgs[2].includes("-")) {
+    userOptions.option.push(cmdLineArgs[2]);
+    userOptions.noOfLines = cmdLineArgs[cmdLineArgs.indexOf("-n") + 1];
+    if (isInputValid(userOptions)) {
+      userOptions.filePath = cmdLineArgs[cmdLineArgs.indexOf("-n") + 2];
+      return userOptions;
+    }
+    generateError(
+      `tail: illegal offset -- ${cmdLineArgs[cmdLineArgs.indexOf("-n") + 1]}`
+    );
+  }
+  userOptions.filePath = cmdLineArgs[2];
+  return userOptions;
+};
+
+const isInputValid = function(cmdLineArgs) {
+  if (cmdLineArgs.option[0] == "-n") {
+    return Number.isInteger(+cmdLineArgs.noOfLines);
+  }
+  return true;
+};
+
+const generateError = function(errorMessage) {
+  throw new Error(errorMessage);
 };
 
 const formatContent = function(last10Lines) {
@@ -19,19 +41,10 @@ const selectLast10Lines = function(contentAndNoOfLines) {
   return formatContent(last10Lines);
 };
 
-const performTailOperation = function(userOptions, fileOperations) {
-  if (doesFileExist(fileOperations)) {
-    const content = loadFile(fileOperations);
-    userOptions.content = content;
-    const contentToPrint = selectLast10Lines(userOptions);
-    return contentToPrint;
-  }
-  throw new Error(`tail: ${userOptions.filePath}: No such file or directory`);
-};
-
 module.exports = {
   formatContent,
   selectLast10Lines,
-  performTailOperation,
-  parseArguments
+  parseArguments,
+  isInputValid,
+  generateError
 };

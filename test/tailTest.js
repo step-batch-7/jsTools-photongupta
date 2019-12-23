@@ -1,9 +1,9 @@
-const assert = require("assert");
+const assert = require("chai").assert;
 const {
   formatContent,
   selectLast10Lines,
-  performTailOperation,
-  parseArguments
+  parseArguments,
+  isInputValid
 } = require("../src/tailLib");
 
 describe("formatContent", function() {
@@ -34,65 +34,48 @@ describe("selectLast10Lines", function() {
   });
 });
 
-describe("performTailOperation", function() {
-  it("should load the file content if given file is present", function() {
-    const userOptions = {
-      filePath: "path",
-      noOfLines: 10
-    };
-    const read = function(path, encoding) {
-      assert.strictEqual(path, "path");
-      assert.strictEqual(encoding, "utf8");
-      return "a\nb";
-    };
-    const existsFile = function(path) {
-      assert.strictEqual(path, "path");
-      return true;
-    };
-    const fileOperation = {
-      path: "path",
-      encoding: "utf8",
-      reader: read,
-      existsFile: existsFile
-    };
-    assert.strictEqual(
-      performTailOperation(userOptions, fileOperation),
-      "a\nb"
+describe("parseArguments", function() {
+  it("should give the object containing filePath, no. of lines and options", function() {
+    assert.deepStrictEqual(parseArguments(["node", "tail.js", "a.txt"]), {
+      filePath: "a.txt",
+      noOfLines: 10,
+      option: []
+    });
+  });
+  it("should give the object containing filePath, no. of lines and options", function() {
+    assert.deepStrictEqual(
+      parseArguments(["node", "tail.js", "-n", "5", "a.txt"]),
+      {
+        filePath: "a.txt",
+        noOfLines: "5",
+        option: ["-n"]
+      }
     );
   });
-
-  it("should throw the error if given file is not present", function() {
-    const userOptions = {
-      filePath: "path",
-      noOfLines: 10
-    };
-    const read = function(path, encoding) {
-      assert.strictEqual(path, "path");
-      assert.strictEqual(encoding, "utf8");
-      return "a\nb";
-    };
-    const existsFile = function(path) {
-      assert.strictEqual(path, "path");
-      return false;
-    };
-    const fileOperation = {
-      path: "path",
-      encoding: "utf8",
-      reader: read,
-      existsFile: existsFile
-    };
+  it("should throw an error if the no of lines is not specified after the -n option", function() {
     assert.throws(
-      () => performTailOperation(userOptions, fileOperation),
+      () => parseArguments(["node", "tail.js", "-n", "a.txt"]),
       Error
     );
   });
 });
 
-describe("parseArguments", function() {
-  it("should give the fileName from command line arguments", function() {
-    assert.deepStrictEqual(parseArguments(["node", "tail.js", "a.txt"]), {
-      filePath: "a.txt",
-      noOfLines: 10
-    });
+describe("isInputValid", function() {
+  it("should validate if the argument of -n option is a integer", function() {
+    assert.isTrue(
+      isInputValid({ option: ["-n"], noOfLines: 4, filePath: "a.txt" })
+    );
+  });
+
+  it("should not validate if the argument of -n option is not a integer ", function() {
+    assert.isFalse(
+      isInputValid({ option: ["-n"], noOfLines: "Joha", filePath: "a.txt" })
+    );
+  });
+
+  it("should validate if only file is given ", function() {
+    assert.isTrue(
+      isInputValid({ option: [], noOfLines: 10, filePath: "a.txt" })
+    );
   });
 });
