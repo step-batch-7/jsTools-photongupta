@@ -25,24 +25,22 @@ describe("doesFileExists", function() {
       return true;
     };
     const fileOperation = {
-      filePath: "path",
       encoding: "utf8",
       existsFile: existsFile
     };
-    assert.isTrue(doesFileExist(fileOperation));
+    assert.isTrue(doesFileExist(fileOperation, "path"));
   });
 
   it("should not validate if given file does not exists", function() {
-    const existsFile = function(path) {
-      assert.strictEqual(path, "path");
+    const existsFile = function(filePath) {
+      assert.strictEqual(filePath, "path");
       return false;
     };
     const fileOperation = {
-      filePath: "path",
       encoding: "utf8",
       existsFile: existsFile
     };
-    assert.isFalse(doesFileExist(fileOperation));
+    assert.isFalse(doesFileExist(fileOperation, "path"));
   });
 });
 
@@ -54,12 +52,11 @@ describe("loadFile", function() {
       return "hello";
     };
     const fileOperation = {
-      filePath: "path",
       encoding: "utf8",
       reader: read
     };
 
-    assert.strictEqual(loadFile(fileOperation), "hello");
+    assert.strictEqual(loadFile(fileOperation, "path"), "hello");
   });
 
   it("should give empty string if file is empty", function() {
@@ -69,10 +66,9 @@ describe("loadFile", function() {
       return "";
     };
     const fileOperation = {
-      filePath: "path",
       encoding: "utf8",
       reader: read
     };
-    assert.strictEqual(loadFile(fileOperation), "");
+    assert.strictEqual(loadFile(fileOperation, "path"), "");
   });
 });

@@ -86,7 +86,7 @@ describe("performTailOperation", function() {
     };
     assert.deepStrictEqual(performTailOperation(userOptions, fileOperation), {
       error:
-        "tail: illegal option -- -k\n    usage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]",
+        "tail: illegal option -- k\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]",
       output: ""
     });
   });
@@ -103,6 +103,7 @@ describe("performTailOperation", function() {
       return false;
     };
     const fileOperation = {
+      encoding: "utf8",
       reader: read,
       existsFile: existsFile
     };
@@ -115,22 +116,16 @@ describe("performTailOperation", function() {
 
 describe("parseOptions", function() {
   it("should give the object containing filePath, no. of lines even if option is not given", function() {
-    assert.deepStrictEqual(
-      parseOptions("a.txt", ["node", "tail.js", "a.txt"]),
-      {
-        filePath: "a.txt",
-        noOfLines: 10
-      }
-    );
+    assert.deepStrictEqual(parseOptions(["a.txt"]), {
+      filePath: "a.txt",
+      noOfLines: 10
+    });
   });
 
   it("should give the object containing filePath, no. of lines ", function() {
-    assert.deepStrictEqual(
-      parseOptions("a.txt", ["node", "tail.js", "-n", "3", "a.txt"]),
-      {
-        filePath: "a.txt",
-        noOfLines: 3
-      }
-    );
+    assert.deepStrictEqual(parseOptions(["-n", "3", "a.txt"]), {
+      filePath: "a.txt",
+      noOfLines: 3
+    });
   });
 });

@@ -1,42 +1,9 @@
-Todo list for first expectation --
+✅--done--Todo list for first expectation --
 A.first flow => if the line number does not given By user
-------------------------------------------------------
-        a.txt
-cc        
-dd
-ee
-ff
-gg
-hh
-ii
-jj
-kk
-ll
-mm
-nn
-------------------------------------------------------
-a.1 if file exists
-Input - node tail.js a.txt
-Output - 
-ee
-ff
-gg
-hh
-ii
-jj
-kk
-ll
-mm
-nn
-------------------------------------------------------
-a.2 if file a.txt does not exists 
 
->Input => node tail.js a.txt
->Output => tail : error: no such file or directory   
-------------------------------------------------------
-
-
-
+Inputs -- 
+1.node tail.js a.txt
+2.node tail.js badFile.txt
 
 --done--make following folders and file-
 tail.js
@@ -55,19 +22,55 @@ testTail.js
 
 --done--performTailOperation function
 
---done--implement main
-
 --done-- input validation
 
---done-- refactor parseArgument
+--done--implement main
 
 --done--remove the try catch method
+
+************************************************************************************************************
+
+
+✅=>Todo List of second expectation --
+B.Second flow => if the number of lines specified by user
+
+Inputs--
+1.node tail.js -n 4 a.txt
+2.node tail.js -n 4 badFile.txt
+3.node tail.js -n a a.txt
+4.node tail.js -n a.txt
+5.node tail.js -x a.txt
+
+--done--write appTests
+
+--done--Modify inputValidation
+
+--done--Modify parseArgument
+
+--done--convertSelect10Lines --> selectLast1NLines
+
+************************************************************************************************************
+
+=>Todo List of third expectation --
+B.Third flow => if -r option is present
+
+Inputs--
+1.node tail.js -r a.txt
+2.node tail.js -r badFile.txt
+3.node tail.js -r -n 3 a.txt
+4.node tail.js -r -n 3 badFile.txt
+5.node tail.js -r -n a.txt
+6.node tail.js -r -x a.txt
+
+=>write appTests
 
 =>Modify inputValidation
 
 =>Modify parseArgument
 
-=>Modify selectLast10Lines
+=>Modify selectLastNLines
+
+
 
 
 

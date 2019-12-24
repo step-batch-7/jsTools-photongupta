@@ -29,14 +29,23 @@ const getInvalidOptions = function(option) {
   return !validOptions.includes(option);
 };
 
+const validateInput = function(cmdLineArgs) {
+  const options = getOptions(cmdLineArgs);
+  const invalidOptions = options.filter(getInvalidOptions);
+  if (isInValidOptionsPresent(invalidOptions))
+    return { error: err.invalidOption(invalidOptions[0]) };
+  if (isNoOfLinesValid(cmdLineArgs)) {
+    return { error: err.illegalCount(getNextElement(cmdLineArgs, "-n")) };
+  }
+  return { error: null };
+};
+
 const formatContent = function(last10Lines) {
   return last10Lines.join("\n");
 };
 
-const selectLast10Lines = function(contentAndNoOfLines) {
-  const last10Lines = contentAndNoOfLines.content
-    .split("\n")
-    .slice(-contentAndNoOfLines.noOfLines - 1);
+const selectLast10Lines = function(content, noOfLines) {
+  const last10Lines = content.split("\n").slice(-noOfLines - 1);
   return formatContent(last10Lines);
 };
 
@@ -54,17 +63,6 @@ const isNoOfLinesValid = function(cmdLineArgs) {
 
 const getNextElement = function(array, element) {
   return array[array.indexOf(element) + 1];
-};
-
-const validateInput = function(cmdLineArgs) {
-  const options = getOptions(cmdLineArgs);
-  const invalidOptions = options.filter(getInvalidOptions);
-  if (isInValidOptionsPresent(invalidOptions))
-    return { error: err.invalidOption(invalidOptions[0]) };
-  if (isNoOfLinesValid(cmdLineArgs)) {
-    return { error: err.illegalCount(getNextElement(cmdLineArgs, "-n")) };
-  }
-  return { error: null };
 };
 
 module.exports = {

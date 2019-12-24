@@ -7,33 +7,33 @@ const {
   validateInput
 } = require("./tailLib");
 
-const parseOptions = function(filePath, cmdLineArgs) {
+const parseOptions = function(cmdLineArgs) {
   const userArgs = {};
-  userArgs.filePath = filePath;
+  userArgs.filePath = getFilePath(cmdLineArgs);
   userArgs.noOfLines = getNoOfLines(cmdLineArgs);
   return userArgs;
 };
 
 const getContent = function(userArgs, fileOperations) {
-  const content = loadFile(fileOperations);
-  userArgs.content = content;
-  const contentToPrint = selectLast10Lines(userArgs);
+  const content = loadFile(fileOperations, userArgs.filePath);
+  const contentToPrint = selectLast10Lines(content, userArgs.noOfLines);
   return contentToPrint;
 };
 
 const performTailOperation = function(cmdLineArgs, fileOperations) {
-  const filePath = getFilePath(cmdLineArgs);
-  fileOperations.filePath = filePath;
-  const inputValidation = validateInput(cmdLineArgs);
-  if (inputValidation.error != null) {
-    return { error: inputValidation.error, output: "" };
+  const contentToPrint = { error: "", output: "" };
+  const validationMsg = validateInput(cmdLineArgs);
+  if (validationMsg.error != null) {
+    contentToPrint.error = validationMsg.error;
+    return contentToPrint;
   }
-  if (!doesFileExist(fileOperations)) {
-    return { error: err.fileNotExists(filePath), output: "" };
+  const userArgs = parseOptions(cmdLineArgs);
+  if (!doesFileExist(fileOperations, userArgs.filePath)) {
+    contentToPrint.error = err.fileNotExists(userArgs.filePath);
+    return contentToPrint;
   }
-  const userArgs = parseOptions(filePath, cmdLineArgs);
-  const contentToPrint = getContent(userArgs, fileOperations);
-  return { error: "", output: contentToPrint };
+  contentToPrint.output = getContent(userArgs, fileOperations);
+  return contentToPrint;
 };
 
 module.exports = { performTailOperation, parseOptions };

@@ -9,15 +9,12 @@ const getFileOperations = function() {
   return fileOperations;
 };
 
-const doesFileExist = function(fileOperations) {
-  return fileOperations.existsFile(fileOperations.filePath);
+const doesFileExist = function(fileOperations, filePath) {
+  return fileOperations.existsFile(filePath);
 };
 
-const loadFile = function(fileOperations) {
-  let content = fileOperations.reader(
-    fileOperations.filePath,
-    fileOperations.encoding
-  );
+const loadFile = function(fileOperations, filePath) {
+  let content = fileOperations.reader(filePath, fileOperations.encoding);
   return content;
 };
 
