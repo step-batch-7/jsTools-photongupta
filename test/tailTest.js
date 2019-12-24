@@ -32,3 +32,27 @@ describe("selectLast10Lines", function() {
     assert.deepStrictEqual(actual, expected);
   });
 });
+
+describe("validateInput", function() {
+  it("should give an object containing error if options are invalid", function() {
+    const cmdLineArgs = ["node", "tail.js", "-e", "a.txt"];
+    assert.deepStrictEqual(validateInput(cmdLineArgs), {
+      error:
+        "tail: illegal option -- -e\n    usage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
+    });
+  });
+
+  it("should give an object containing error if argument of -n option in not valid", function() {
+    const cmdLineArgs = ["node", "tail.js", "-n", "r", "a.txt"];
+    assert.deepStrictEqual(validateInput(cmdLineArgs), {
+      error: "tail: illegal offset -- r"
+    });
+  });
+
+  it("should give an object containing null error if the input is valid", function() {
+    const cmdLineArgs = ["node", "tail.js", "-n", "3", "a.txt"];
+    assert.deepStrictEqual(validateInput(cmdLineArgs), {
+      error: null
+    });
+  });
+});
