@@ -1,4 +1,4 @@
-const { err } = require("./errorLib");
+const err = require("./errorLib");
 const { doesFileExist, loadFile } = require("./fileOperations");
 const {
   selectLast10Lines,

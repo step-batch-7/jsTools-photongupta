@@ -57,13 +57,17 @@ testTail.js
 
 --done--implement main
 
-Todo list for second expectation -- 
 --done-- input validation
+
 --done-- refactor parseArgument
+
 --done--remove the try catch method
-Modify inputValidation
-Modify parseArgument
-Modify selectLast10Lines
+
+=>Modify inputValidation
+
+=>Modify parseArgument
+
+=>Modify selectLast10Lines
 
 
 

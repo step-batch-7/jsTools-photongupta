@@ -1,4 +1,4 @@
-const { err } = require("./errorLib");
+const err = require("./errorLib");
 
 const getFilePath = function(cmdLineArgs) {
   const fileName = cmdLineArgs.includes("-n")
