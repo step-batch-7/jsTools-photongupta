@@ -1,15 +1,13 @@
-const { parseArguments } = require("./src/tailLib");
+const { stdout, stderr } = require("process");
 const { getFileOperations } = require("./src/fileOperations");
 const { performTailOperation } = require("./src/performAction");
 
 const main = function() {
-  try {
-    const userOptions = parseArguments(process.argv);
-    const fileOperations = getFileOperations(userOptions);
-    console.log(performTailOperation(userOptions, fileOperations));
-  } catch (err) {
-    console.error(err.message);
-  }
+  const userOptions = process.argv.slice(2);
+  const fileOperations = getFileOperations();
+  const contentToPrint = performTailOperation(userOptions, fileOperations);
+  stdout.write(contentToPrint.output);
+  stderr.write(contentToPrint.error);
 };
 
 main();

@@ -8,9 +8,8 @@ const {
 
 describe("getFileOperations", function() {
   it("should give an object that will contain all required tools for file processing.", function() {
-    const actual = getFileOperations({ filePath: "path" });
+    const actual = getFileOperations();
     const expected = {
-      path: "path",
       encoding: "utf8",
       reader: fs.readFileSync,
       existsFile: fs.existsSync
@@ -26,7 +25,7 @@ describe("doesFileExists", function() {
       return true;
     };
     const fileOperation = {
-      path: "path",
+      filePath: "path",
       encoding: "utf8",
       existsFile: existsFile
     };
@@ -39,7 +38,7 @@ describe("doesFileExists", function() {
       return false;
     };
     const fileOperation = {
-      path: "path",
+      filePath: "path",
       encoding: "utf8",
       existsFile: existsFile
     };
@@ -55,7 +54,7 @@ describe("loadFile", function() {
       return "hello";
     };
     const fileOperation = {
-      path: "path",
+      filePath: "path",
       encoding: "utf8",
       reader: read
     };
@@ -70,7 +69,7 @@ describe("loadFile", function() {
       return "";
     };
     const fileOperation = {
-      path: "path",
+      filePath: "path",
       encoding: "utf8",
       reader: read
     };

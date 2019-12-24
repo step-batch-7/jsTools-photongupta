@@ -1,33 +1,32 @@
-const parseArguments = function(cmdLineArgs) {
-  const userOptions = {
-    filePath: undefined,
-    option: [],
-    noOfLines: 10
-  };
-  if (cmdLineArgs[2].includes("-")) {
-    userOptions.option.push(cmdLineArgs[2]);
-    userOptions.noOfLines = cmdLineArgs[cmdLineArgs.indexOf("-n") + 1];
-    if (isInputValid(userOptions)) {
-      userOptions.filePath = cmdLineArgs[cmdLineArgs.indexOf("-n") + 2];
-      return userOptions;
+const { err } = require("./errorLib");
+
+const getFilePath = function(cmdLineArgs) {
+  const fileName = cmdLineArgs.includes("-n")
+    ? cmdLineArgs[cmdLineArgs.indexOf("-n") + 2]
+    : cmdLineArgs[0];
+  return fileName;
+};
+
+const getNoOfLines = function(cmdLineArgs) {
+  const noOfLines = cmdLineArgs.includes("-n")
+    ? +cmdLineArgs[cmdLineArgs.indexOf("-n") + 1]
+    : 10;
+  return noOfLines;
+};
+
+const getOptions = function(cmdLineArgs) {
+  const options = cmdLineArgs.filter((option, index, cmdLineArgs) => {
+    if (cmdLineArgs.includes("-n")) {
+      return option.slice(0, 1) == "-" && index <= cmdLineArgs.indexOf("-n");
     }
-    generateError(
-      `tail: illegal offset -- ${cmdLineArgs[cmdLineArgs.indexOf("-n") + 1]}`
-    );
-  }
-  userOptions.filePath = cmdLineArgs[2];
-  return userOptions;
+    return option.slice(0, 1) == "-";
+  });
+  return options;
 };
 
-const isInputValid = function(cmdLineArgs) {
-  if (cmdLineArgs.option[0] == "-n") {
-    return Number.isInteger(+cmdLineArgs.noOfLines);
-  }
-  return true;
-};
-
-const generateError = function(errorMessage) {
-  throw new Error(errorMessage);
+const getInvalidOptions = function(option) {
+  const validOptions = ["-n"];
+  return !validOptions.includes(option);
 };
 
 const formatContent = function(last10Lines) {
@@ -37,14 +36,41 @@ const formatContent = function(last10Lines) {
 const selectLast10Lines = function(contentAndNoOfLines) {
   const last10Lines = contentAndNoOfLines.content
     .split("\n")
-    .slice(-contentAndNoOfLines.noOfLines);
+    .slice(-contentAndNoOfLines.noOfLines - 1);
   return formatContent(last10Lines);
 };
 
+const isInValidOptionsPresent = function(invalidOptions) {
+  return invalidOptions.length != 0;
+};
+
+const isOptionArgsIsInteger = function(cmdLineArgs) {
+  return !Number.isInteger(+getNextElement(cmdLineArgs, "-n"));
+};
+
+const isNoOfLinesValid = function(cmdLineArgs) {
+  return cmdLineArgs.includes("-n") && isOptionArgsIsInteger(cmdLineArgs);
+};
+
+const getNextElement = function(array, element) {
+  return array[array.indexOf(element) + 1];
+};
+
+const validateInput = function(cmdLineArgs) {
+  const options = getOptions(cmdLineArgs);
+  const invalidOptions = options.filter(getInvalidOptions);
+  if (isInValidOptionsPresent(invalidOptions))
+    return { error: err.invalidOption(invalidOptions[0]) };
+  if (isNoOfLinesValid(cmdLineArgs)) {
+    return { error: err.illegalCount(getNextElement(cmdLineArgs, "-n")) };
+  }
+  return { error: null };
+};
+
 module.exports = {
-  formatContent,
+  getFilePath,
+  getNoOfLines,
+  validateInput,
   selectLast10Lines,
-  parseArguments,
-  isInputValid,
-  generateError
+  formatContent
 };

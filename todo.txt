@@ -60,8 +60,7 @@ testTail.js
 Todo list for second expectation -- 
 --done-- input validation
 --done-- refactor parseArgument
-
-Todo list for third expectation --
+--done--remove the try catch method
 Modify inputValidation
 Modify parseArgument
 Modify selectLast10Lines
