@@ -16,11 +16,11 @@ testTail.js
 
 --done--loadFile function
 
---done--selectLast10Lines function 
+--done--selectLastNLines function 
 
 --done--formatContent function 
 
---done--performTailOperation function
+--done--performTail function
 
 --done-- input validation
 
@@ -69,10 +69,3 @@ Inputs--
 =>Modify parseArgument
 
 =>Modify selectLastNLines
-
-
-
-
-
-
-

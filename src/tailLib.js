@@ -9,19 +9,33 @@ const getFilePath = function(cmdLineArgs) {
 
 const getNoOfLines = function(cmdLineArgs) {
   const noOfLines = cmdLineArgs.includes("-n")
-    ? +cmdLineArgs[cmdLineArgs.indexOf("-n") + 1]
-    : 10;
+    ? cmdLineArgs[cmdLineArgs.indexOf("-n") + 1]
+    : "10";
   return noOfLines;
 };
 
 const getOptions = function(cmdLineArgs) {
-  const options = cmdLineArgs.filter((option, index, cmdLineArgs) => {
-    if (cmdLineArgs.includes("-n")) {
-      return option.slice(0, 1) == "-" && index <= cmdLineArgs.indexOf("-n");
-    }
-    return option.slice(0, 1) == "-";
-  });
+  const userOptions = cmdLineArgs.includes("-n")
+    ? cmdLineArgs.slice(0, cmdLineArgs.indexOf("-n") + 1)
+    : cmdLineArgs;
+  const options = userOptions.filter(option => option.slice(0, 1) == "-");
   return options;
+};
+
+const validateInput = function(cmdLineArgs) {
+  const options = getOptions(cmdLineArgs);
+  const invalidOptions = options.filter(getInvalidOptions);
+  if (invalidOptions.length != 0)
+    return { error: err.invalidOption(invalidOptions[0]) };
+  const noOfLines = getNoOfLines(cmdLineArgs);
+  if (isNotNumber(noOfLines)) {
+    return { error: err.illegalCount(noOfLines) };
+  }
+  return { error: null };
+};
+
+const isNotNumber = function(noOfLines) {
+  return !Number.isInteger(+noOfLines);
 };
 
 const getInvalidOptions = function(option) {
@@ -29,46 +43,14 @@ const getInvalidOptions = function(option) {
   return !validOptions.includes(option);
 };
 
-const validateInput = function(cmdLineArgs) {
-  const options = getOptions(cmdLineArgs);
-  const invalidOptions = options.filter(getInvalidOptions);
-  if (isInValidOptionsPresent(invalidOptions))
-    return { error: err.invalidOption(invalidOptions[0]) };
-  if (isNoOfLinesValid(cmdLineArgs)) {
-    return { error: err.illegalCount(getNextElement(cmdLineArgs, "-n")) };
-  }
-  return { error: null };
-};
-
-const formatContent = function(last10Lines) {
-  return last10Lines.join("\n");
-};
-
-const selectLast10Lines = function(content, noOfLines) {
+const selectLastNLines = function(content, noOfLines) {
   const last10Lines = content.split("\n").slice(-noOfLines - 1);
-  return formatContent(last10Lines);
-};
-
-const isInValidOptionsPresent = function(invalidOptions) {
-  return invalidOptions.length != 0;
-};
-
-const isOptionArgsIsInteger = function(cmdLineArgs) {
-  return !Number.isInteger(+getNextElement(cmdLineArgs, "-n"));
-};
-
-const isNoOfLinesValid = function(cmdLineArgs) {
-  return cmdLineArgs.includes("-n") && isOptionArgsIsInteger(cmdLineArgs);
-};
-
-const getNextElement = function(array, element) {
-  return array[array.indexOf(element) + 1];
+  return last10Lines.join("\n");
 };
 
 module.exports = {
   getFilePath,
   getNoOfLines,
   validateInput,
-  selectLast10Lines,
-  formatContent
+  selectLastNLines
 };

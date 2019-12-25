@@ -1,7 +1,7 @@
-const { performTailOperation, parseOptions } = require("../src/performAction");
+const { performTail, parseOptions } = require("../src/performAction");
 const assert = require("chai").assert;
 
-describe("performTailOperation", function() {
+describe("performTail", function() {
   it("should perform tail operation if given file is present", function() {
     const userOptions = ["path"];
     const read = function(path, encoding) {
@@ -18,7 +18,7 @@ describe("performTailOperation", function() {
       reader: read,
       existsFile: existsFile
     };
-    assert.deepStrictEqual(performTailOperation(userOptions, fileOperation), {
+    assert.deepStrictEqual(performTail(userOptions, fileOperation), {
       error: "",
       output: "a\nb"
     });
@@ -41,7 +41,7 @@ describe("performTailOperation", function() {
       existsFile: existsFile
     };
 
-    assert.deepStrictEqual(performTailOperation(userOptions, fileOperation), {
+    assert.deepStrictEqual(performTail(userOptions, fileOperation), {
       error: "",
       output: "a\nb\nc\nd"
     });
@@ -63,7 +63,7 @@ describe("performTailOperation", function() {
       reader: read,
       existsFile: existsFile
     };
-    assert.deepStrictEqual(performTailOperation(userOptions, fileOperation), {
+    assert.deepStrictEqual(performTail(userOptions, fileOperation), {
       error: "tail: illegal offset -- abc",
       output: ""
     });
@@ -84,7 +84,7 @@ describe("performTailOperation", function() {
       reader: read,
       existsFile: existsFile
     };
-    assert.deepStrictEqual(performTailOperation(userOptions, fileOperation), {
+    assert.deepStrictEqual(performTail(userOptions, fileOperation), {
       error:
         "tail: illegal option -- k\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]",
       output: ""
@@ -107,7 +107,7 @@ describe("performTailOperation", function() {
       reader: read,
       existsFile: existsFile
     };
-    assert.deepStrictEqual(performTailOperation(userOptions, fileOperation), {
+    assert.deepStrictEqual(performTail(userOptions, fileOperation), {
       error: "tail: path: No such file or directory",
       output: ""
     });
