@@ -1,16 +1,14 @@
-const { readFileSync, existsSync } = require("fs");
+const { readFile } = require("fs");
 const { performTail } = require("./src/performAction");
 
 const main = function() {
   const cmdLineArgs = process.argv.slice(2);
-  const fileOperations = {
-    encoding: "utf8",
-    reader: readFileSync,
-    existsFile: existsSync
+  const displayMsg = function(contentToPrint) {
+    const { output, error } = contentToPrint;
+    process.stdout.write(output);
+    process.stderr.write(error);
   };
-  const contentToPrint = performTail(cmdLineArgs, fileOperations);
-  process.stdout.write(contentToPrint.output);
-  process.stderr.write(contentToPrint.error);
+  performTail(cmdLineArgs, readFile, displayMsg);
 };
 
 main();

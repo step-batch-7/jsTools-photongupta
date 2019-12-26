@@ -1,5 +1,5 @@
 const fileNotExists = function(fileName) {
-  return { error: `tail: ${fileName}: No such file or directory`, output: "" };
+  return `tail: ${fileName}: No such file or directory`;
 };
 
 const invalidOption = function(option) {

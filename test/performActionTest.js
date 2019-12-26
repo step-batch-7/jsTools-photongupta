@@ -1,116 +1,100 @@
-const { performTail, parseOptions } = require("../src/performAction");
+const { performTail, parseOptions, loadFile } = require("../src/performAction");
 const assert = require("chai").assert;
+
+describe("loadFile", function() {
+  it("should load the content of given file", function() {
+    const userOptions = { filePath: "path", noOfLines: 10 };
+    const reader = function(filePath, encoding, callback) {
+      assert.strictEqual(filePath, "path");
+      assert.strictEqual(encoding, "utf8");
+      callback(null, "h\nhow\nare");
+    };
+    const displayMsg = function(message) {
+      assert.deepStrictEqual(message.output, "h\nhow\nare");
+      assert.deepStrictEqual(message.error, "");
+    };
+    loadFile(userOptions, reader, displayMsg);
+  });
+
+  it("should give error if the file is not present", function() {
+    const userOptions = { filePath: "path", noOfLines: 10 };
+    const reader = function(filePath, encoding, callback) {
+      assert.strictEqual(filePath, "path");
+      assert.strictEqual(encoding, "utf8");
+      callback("err", null);
+    };
+    const displayMsg = function(message) {
+      assert.strictEqual(message.output, "");
+      assert.strictEqual(
+        message.error,
+        `tail: ${userOptions.filePath}: No such file or directory`
+      );
+    };
+    loadFile(userOptions, reader, displayMsg);
+  });
+});
 
 describe("performTail", function() {
   it("should perform tail operation if given file is present", function() {
     const userOptions = ["path"];
-    const read = function(path, encoding) {
-      assert.strictEqual(path, "path");
+    const reader = function(filePath, encoding, callback) {
+      assert.strictEqual(filePath, "path");
       assert.strictEqual(encoding, "utf8");
-      return "a\nb";
+      callback(null, "hi");
     };
-    const existsFile = function(path) {
-      assert.strictEqual(path, "path");
-      return true;
+    const displayMsg = function(message) {
+      assert.deepStrictEqual(message.output, "hi");
+      assert.strictEqual(message.error, "");
     };
-    const fileOperation = {
-      encoding: "utf8",
-      reader: read,
-      existsFile: existsFile
-    };
-    assert.deepStrictEqual(performTail(userOptions, fileOperation), {
-      error: "",
-      output: "a\nb"
-    });
+    performTail(userOptions, reader, displayMsg);
   });
 
-  it("should perform tail operation according to given number of lines if file is present", function() {
-    const userOptions = ["-n", "4", "path"];
-    const read = function(path, encoding) {
-      assert.strictEqual(path, "path");
+  it("should perform tail operation if given file is present", function() {
+    const userOptions = ["path"];
+    const reader = function(filePath, encoding, callback) {
+      assert.strictEqual(filePath, "path");
       assert.strictEqual(encoding, "utf8");
-      return "a\nb\nc\nd";
+      callback("err", null);
     };
-    const existsFile = function(path) {
-      assert.strictEqual(path, "path");
-      return true;
+    const displayMsg = function(message) {
+      assert.strictEqual(message.output, "");
+      assert.strictEqual(
+        message.error,
+        `tail: path: No such file or directory`
+      );
     };
-    const fileOperation = {
-      encoding: "utf8",
-      reader: read,
-      existsFile: existsFile
-    };
-
-    assert.deepStrictEqual(performTail(userOptions, fileOperation), {
-      error: "",
-      output: "a\nb\nc\nd"
-    });
+    performTail(userOptions, reader, displayMsg);
   });
 
-  it("should give error if the argument of -n option is not a number", function() {
-    const userOptions = ["-n", "abc", "path"];
-    const read = function(path, encoding) {
-      assert.strictEqual(path, "path");
+  it("should give error when option is not valid", function() {
+    const userOptions = ["-path"];
+    const reader = function(filePath, encoding, callback) {
+      assert.strictEqual(filePath, "path");
       assert.strictEqual(encoding, "utf8");
-      return "a\nb\nc\nd";
+      callback("err", null);
     };
-    const existsFile = function(path) {
-      assert.strictEqual(path, "path");
-      return true;
+    const displayMsg = function(message) {
+      assert.strictEqual(message.output, "");
+      assert.strictEqual(
+        message.error,
+        `tail: illegal option -- path\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]`
+      );
     };
-    const fileOperation = {
-      encoding: "utf8",
-      reader: read,
-      existsFile: existsFile
-    };
-    assert.deepStrictEqual(performTail(userOptions, fileOperation), {
-      error: "tail: illegal offset -- abc",
-      output: ""
-    });
+    performTail(userOptions, reader, displayMsg);
   });
 
-  it("should give error if the option is not valid", function() {
-    const userOptions = ["-k", "abc", "path"];
-    const read = function(path, encoding) {
-      assert.strictEqual(path, "path");
+  it("should give error when argument of -n option is invalid", function() {
+    const userOptions = ["-n", "r", "path"];
+    const reader = function(filePath, encoding, callback) {
+      assert.strictEqual(filePath, "path");
       assert.strictEqual(encoding, "utf8");
-      return "a\nb\nc\nd";
+      callback("err", null);
     };
-    const existsFile = function(path) {
-      assert.strictEqual(path, "path");
-      return true;
+    const displayMsg = function(message) {
+      assert.strictEqual(message.output, "");
+      assert.strictEqual(message.error, `tail: illegal offset -- r`);
     };
-    const fileOperation = {
-      reader: read,
-      existsFile: existsFile
-    };
-    assert.deepStrictEqual(performTail(userOptions, fileOperation), {
-      error:
-        "tail: illegal option -- k\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]",
-      output: ""
-    });
-  });
-
-  it("should give error if file is not present", function() {
-    const userOptions = ["-n", "4", "path"];
-    const read = function(path, encoding) {
-      assert.strictEqual(path, "path");
-      assert.strictEqual(encoding, "utf8");
-      return "a\nb\nc\nd";
-    };
-    const existsFile = function(path) {
-      assert.strictEqual(path, "path");
-      return false;
-    };
-    const fileOperation = {
-      encoding: "utf8",
-      reader: read,
-      existsFile: existsFile
-    };
-    assert.deepStrictEqual(performTail(userOptions, fileOperation), {
-      error: "tail: path: No such file or directory",
-      output: ""
-    });
+    performTail(userOptions, reader, displayMsg);
   });
 });
 

@@ -51,6 +51,12 @@ Inputs--
 
 ************************************************************************************************************
 
+✅refactor the performTail function 
+✅remove the readFileSync and existsFile
+✅use readFile
+
+************************************************************************************************************
+
 =>Todo List of third expectation --
 B.Third flow => if -r option is present
 

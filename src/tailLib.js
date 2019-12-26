@@ -3,7 +3,7 @@ const errorMsg = require("./errorLib");
 const getNoOfLines = function(cmdLineArgs) {
   return cmdLineArgs.includes("-n")
     ? cmdLineArgs[cmdLineArgs.indexOf("-n") + 1]
-    : "10";
+    : 10;
 };
 
 const isNotNumber = function(noOfLines) {
