@@ -31,7 +31,9 @@ const validateInput = function(cmdLineArgs) {
 };
 
 const selectLastNLines = function(content, noOfLines) {
-  const last10Lines = content.split("\n").slice(-noOfLines - 1);
+  const splitLines = content.split("\n");
+  if (splitLines[splitLines.length - 1] == "") splitLines.pop();
+  const last10Lines = splitLines.slice(-noOfLines);
   return last10Lines.join("\n");
 };
 
