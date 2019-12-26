@@ -1,14 +1,6 @@
 const assert = require("chai").assert;
 const { selectLastNLines, validateInput } = require("../src/tailLib");
 
-// describe("formatContent", function() {
-//   it("should format the content in appropriate form", function() {
-//     const actual = formatContent(["aa", "bb", "cc", "dd"]);
-//     const expected = "aa\nbb\ncc\ndd";
-//     assert.strictEqual(actual, expected);
-//   });
-// });
-
 describe("selectLastNLines", function() {
   it("should give array of last 10 lines of the given content", function() {
     const content = "a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk\nl\nm\n";
@@ -30,14 +22,16 @@ describe("validateInput", function() {
     const cmdLineArgs = ["node", "tail.js", "-e", "a.txt"];
     assert.deepStrictEqual(validateInput(cmdLineArgs), {
       error:
-        "tail: illegal option -- e\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]"
+        "tail: illegal option -- e\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]",
+      output: ""
     });
   });
 
   it("should give an object containing error if argument of -n option in not valid", function() {
     const cmdLineArgs = ["node", "tail.js", "-n", "r", "a.txt"];
     assert.deepStrictEqual(validateInput(cmdLineArgs), {
-      error: "tail: illegal offset -- r"
+      error: "tail: illegal offset -- r",
+      output: ""
     });
   });
 

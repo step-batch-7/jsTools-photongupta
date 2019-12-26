@@ -1,46 +1,33 @@
-const err = require("./errorLib");
-
-const getFilePath = function(cmdLineArgs) {
-  const fileName = cmdLineArgs.includes("-n")
-    ? cmdLineArgs[cmdLineArgs.indexOf("-n") + 2]
-    : cmdLineArgs[0];
-  return fileName;
-};
+const errorMsg = require("./errorLib");
 
 const getNoOfLines = function(cmdLineArgs) {
-  const noOfLines = cmdLineArgs.includes("-n")
+  return cmdLineArgs.includes("-n")
     ? cmdLineArgs[cmdLineArgs.indexOf("-n") + 1]
     : "10";
-  return noOfLines;
-};
-
-const getOptions = function(cmdLineArgs) {
-  const userOptions = cmdLineArgs.includes("-n")
-    ? cmdLineArgs.slice(0, cmdLineArgs.indexOf("-n") + 1)
-    : cmdLineArgs;
-  const options = userOptions.filter(option => option.slice(0, 1) == "-");
-  return options;
-};
-
-const validateInput = function(cmdLineArgs) {
-  const options = getOptions(cmdLineArgs);
-  const invalidOptions = options.filter(getInvalidOptions);
-  if (invalidOptions.length != 0)
-    return { error: err.invalidOption(invalidOptions[0]) };
-  const noOfLines = getNoOfLines(cmdLineArgs);
-  if (isNotNumber(noOfLines)) {
-    return { error: err.illegalCount(noOfLines) };
-  }
-  return { error: null };
 };
 
 const isNotNumber = function(noOfLines) {
   return !Number.isInteger(+noOfLines);
 };
 
-const getInvalidOptions = function(option) {
-  const validOptions = ["-n"];
-  return !validOptions.includes(option);
+const getInvalidOptions = function(cmdLineArgs) {
+  options = cmdLineArgs.filter(option => option.slice(0, 1) == "-");
+  const invalidOptions = options.filter(option => {
+    const validOptions = ["-n"];
+    return !validOptions.includes(option);
+  });
+  return invalidOptions;
+};
+
+const validateInput = function(cmdLineArgs) {
+  const invalidOptions = getInvalidOptions(cmdLineArgs);
+  if (invalidOptions.length != 0)
+    return errorMsg.invalidOption(invalidOptions[0]);
+  const noOfLines = getNoOfLines(cmdLineArgs);
+  if (isNotNumber(noOfLines)) {
+    return errorMsg.illegalCount(noOfLines);
+  }
+  return { error: null };
 };
 
 const selectLastNLines = function(content, noOfLines) {
@@ -49,7 +36,6 @@ const selectLastNLines = function(content, noOfLines) {
 };
 
 module.exports = {
-  getFilePath,
   getNoOfLines,
   validateInput,
   selectLastNLines

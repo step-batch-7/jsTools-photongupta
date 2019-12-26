@@ -1,22 +1,5 @@
-const fs = require("fs");
 const assert = require("chai").assert;
-const {
-  getFileOperations,
-  doesFileExist,
-  loadFile
-} = require("../src/fileOperations");
-
-describe("getFileOperations", function() {
-  it("should give an object that will contain all required tools for file processing.", function() {
-    const actual = getFileOperations();
-    const expected = {
-      encoding: "utf8",
-      reader: fs.readFileSync,
-      existsFile: fs.existsSync
-    };
-    assert.deepStrictEqual(actual, expected);
-  });
-});
+const { doesFileExist, loadFile } = require("../src/fileOperations");
 
 describe("doesFileExists", function() {
   it("should validate if given file exists", function() {
