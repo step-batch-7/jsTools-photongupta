@@ -1,9 +1,10 @@
+"use strict";
 const errorMsg = require("./errorLib");
 
 const getNoOfLines = function(cmdLineArgs) {
   return cmdLineArgs.includes("-n")
     ? cmdLineArgs[cmdLineArgs.indexOf("-n") + 1]
-    : 10;
+    : "10";
 };
 
 const isNotNumber = function(noOfLines) {
@@ -11,7 +12,7 @@ const isNotNumber = function(noOfLines) {
 };
 
 const getInvalidOptions = function(cmdLineArgs) {
-  options = cmdLineArgs.filter(option => option.slice(0, 1) == "-");
+  const options = cmdLineArgs.filter(option => option.slice(0, 1) == "-");
   const invalidOptions = options.filter(option => {
     const validOptions = ["-n"];
     return !validOptions.includes(option);
@@ -31,10 +32,11 @@ const validateInput = function(cmdLineArgs) {
 };
 
 const selectLastNLines = function(content, noOfLines) {
-  const splitLines = content.split("\n");
+  let splitLines = content.split("\n");
   if (splitLines[splitLines.length - 1] == "") splitLines.pop();
-  const last10Lines = splitLines.slice(-noOfLines);
-  return last10Lines.join("\n");
+  if (noOfLines.startsWith("+")) splitLines.splice(0, +noOfLines - 1);
+  else splitLines = splitLines.slice(-+noOfLines);
+  return splitLines.join("\n");
 };
 
 module.exports = {

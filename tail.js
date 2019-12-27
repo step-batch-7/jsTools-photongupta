@@ -1,3 +1,5 @@
+"use strict";
+
 const { readFile } = require("fs");
 const { performTail } = require("./src/performAction");
 

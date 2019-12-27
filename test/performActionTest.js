@@ -3,7 +3,7 @@ const assert = require("chai").assert;
 
 describe("loadFile", function() {
   it("should load the content of given file", function() {
-    const userOptions = { filePath: "path", noOfLines: 10 };
+    const userOptions = { filePath: "path", noOfLines: "10" };
     const reader = function(filePath, encoding, callback) {
       assert.strictEqual(filePath, "path");
       assert.strictEqual(encoding, "utf8");
@@ -17,7 +17,7 @@ describe("loadFile", function() {
   });
 
   it("should give error if the file is not present", function() {
-    const userOptions = { filePath: "path", noOfLines: 10 };
+    const userOptions = { filePath: "path", noOfLines: "10" };
     const reader = function(filePath, encoding, callback) {
       assert.strictEqual(filePath, "path");
       assert.strictEqual(encoding, "utf8");
@@ -102,14 +102,14 @@ describe("parseOptions", function() {
   it("should give the object containing filePath, no. of lines even if option is not given", function() {
     assert.deepStrictEqual(parseOptions(["a.txt"]), {
       filePath: "a.txt",
-      noOfLines: 10
+      noOfLines: "10"
     });
   });
 
   it("should give the object containing filePath, no. of lines ", function() {
     assert.deepStrictEqual(parseOptions(["-n", "3", "a.txt"]), {
       filePath: "a.txt",
-      noOfLines: 3
+      noOfLines: "3"
     });
   });
 });

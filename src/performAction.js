@@ -23,7 +23,7 @@ const performTail = function(cmdLineArgs, readFile, displayMsg) {
 const parseOptions = function(userOptions) {
   const parsedOptions = {
     filePath: userOptions[userOptions.length - 1],
-    noOfLines: +getNoOfLines(userOptions)
+    noOfLines: getNoOfLines(userOptions)
   };
   return parsedOptions;
 };

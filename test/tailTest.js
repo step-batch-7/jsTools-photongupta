@@ -4,14 +4,14 @@ const { selectLastNLines, validateInput } = require("../src/tailLib");
 describe("selectLastNLines", function() {
   it("should give array of last 10 lines of the given content", function() {
     const content = "a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk\nl\nm\n";
-    const noOfLines = 10;
+    const noOfLines = "10";
     const expected = "d\ne\nf\ng\nh\ni\nj\nk\nl\nm";
     assert.deepStrictEqual(selectLastNLines(content, noOfLines), expected);
   });
 
   it("should give array of lines of content if the content contains less than 10 line", function() {
     content = "c\nd\ne\nf\n";
-    noOfLines = 10;
+    noOfLines = "10";
     const expected = "c\nd\ne\nf";
     assert.deepStrictEqual(selectLastNLines(content, noOfLines), expected);
   });

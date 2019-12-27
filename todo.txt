@@ -1,9 +1,9 @@
-✅--done--Todo list for first expectation --
+--done--Todo list for first expectation --
 A.first flow => if the line number does not given By user
 
 Inputs -- 
-1.node tail.js a.txt
-2.node tail.js badFile.txt
+✅1.node tail.js a.txt
+✅2.node tail.js badFile.txt
 
 --done--make following folders and file-
 tail.js
@@ -31,15 +31,20 @@ testTail.js
 ************************************************************************************************************
 
 
-✅=>Todo List of second expectation --
+=>Todo List of second expectation --
 B.Second flow => if the number of lines specified by user
 
 Inputs--
-1.node tail.js -n 4 a.txt
-2.node tail.js -n 4 badFile.txt
-3.node tail.js -n a a.txt
-4.node tail.js -n a.txt
-5.node tail.js -x a.txt
+✅1.node tail.js -n 4 a.txt
+✅2.node tail.js -n 4 badFile.txt
+✅3.node tail.js -n a a.txt
+✅4.node tail.js -n a.txt
+✅5.node tail.js -x a.txt
+✅6.node tail.js -n +4 a.txt
+✅7.node tail.js -n -4 a.txt
+8.node tail.js -n1 a.txt
+9.node tail.js -1 a.txt
+10.node tail.js +1 a.txt
 
 --done--write appTests
 
@@ -49,15 +54,15 @@ Inputs--
 
 --done--convertSelect10Lines --> selectLast1NLines
 
+--done--refactor the performTail function 
+
+--done--remove the readFileSync and existsFile
+
+--done--use readFile
+
 ************************************************************************************************************
 
-✅refactor the performTail function 
-✅remove the readFileSync and existsFile
-✅use readFile
-
-************************************************************************************************************
-
-=>Todo List of third expectation --
+=>Todo List of expectation --
 B.Third flow => if -r option is present
 
 Inputs--
