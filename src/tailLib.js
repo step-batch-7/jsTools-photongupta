@@ -31,12 +31,21 @@ const validateInput = function(cmdLineArgs) {
   return { error: null };
 };
 
+const isLastLineEmpty = function(lines) {
+  return lines[lines.length - 1] == "";
+};
+
 const selectLastNLines = function(content, noOfLines) {
-  let splitLines = content.split("\n");
-  if (splitLines[splitLines.length - 1] == "") splitLines.pop();
-  if (noOfLines.startsWith("+")) splitLines.splice(0, +noOfLines - 1);
-  else splitLines = splitLines.slice(-+noOfLines);
-  return splitLines.join("\n");
+  const splitLines = content.split("\n");
+  const lines = +noOfLines;
+  if (isLastLineEmpty(splitLines)) {
+    splitLines.pop();
+  }
+  let lastNLines = splitLines.slice(-lines);
+  if (noOfLines.startsWith("+")) {
+    lastNLines = splitLines.slice(lines - 1);
+  }
+  return lastNLines.join("\n");
 };
 
 module.exports = {

@@ -62,21 +62,22 @@ Inputs--
 
 ************************************************************************************************************
 
-=>Todo List of expectation --
-B.Third flow => if -r option is present
+=>Todo List of third expectation --
+B.Third flow =>if content is given by the command line
 
 Inputs--
-1.node tail.js -r a.txt
-2.node tail.js -r badFile.txt
-3.node tail.js -r -n 3 a.txt
-4.node tail.js -r -n 3 badFile.txt
-5.node tail.js -r -n a.txt
-6.node tail.js -r -x a.txt
+1.node tail.js 
+2.node tail.js -n 1
+3.cat a.txt | node tail.js 
+4.cat a.txt | node tail.js -n 1
+5.node tail.js -n +1
+6.cat a.txt | node tail.js -n +1
 
-=>write appTests
+=>find out how to write appTests
 
-=>Modify inputValidation
+=>find out the way to test the stdin
 
-=>Modify parseArgument
+=>implement readStdInput
+(Note- reading standard input)
 
-=>Modify selectLastNLines
+=>Modify performTail function
