@@ -37,13 +37,13 @@ const isLastLineEmpty = function(lines) {
 
 const selectLastNLines = function(content, noOfLines) {
   const splitLines = content.split("\n");
-  const lines = +noOfLines;
+  const numberOfLines = +noOfLines;
   if (isLastLineEmpty(splitLines)) {
     splitLines.pop();
   }
-  let lastNLines = splitLines.slice(-lines);
+  let lastNLines = splitLines.slice(-numberOfLines);
   if (noOfLines.startsWith("+")) {
-    lastNLines = splitLines.slice(lines - 1);
+    lastNLines = splitLines.slice(numberOfLines - 1);
   }
   return lastNLines.join("\n");
 };
