@@ -66,18 +66,22 @@ Inputs--
 B.Third flow =>if content is given by the command line
 
 Inputs--
-1.node tail.js 
+✅1.node tail.js 
+✅3.cat a.txt | node tail.js 
 2.node tail.js -n 1
-3.cat a.txt | node tail.js 
 4.cat a.txt | node tail.js -n 1
 5.node tail.js -n +1
 6.cat a.txt | node tail.js -n +1
 
-=>find out how to write appTests
+--done--find out how to write appTests
 
-=>find out the way to test the stdin
+--done--find out the way to test the stdin
 
-=>implement readStdInput
-(Note- reading standard input)
+--done--implement readStdInput
+       (Note- reading standard input)
+
+=>refactor readStdin and loadFile functions
 
 =>Modify performTail function
+
+=>Modify parseOption function

@@ -1,10 +1,10 @@
-"use strict";
-const errorMsg = require("./errorLib");
+'use strict';
+const errorMsg = require('./errorLib');
 
 const getNoOfLines = function(cmdLineArgs) {
-  return cmdLineArgs.includes("-n")
-    ? cmdLineArgs[cmdLineArgs.indexOf("-n") + 1]
-    : "10";
+  return cmdLineArgs.includes('-n')
+    ? cmdLineArgs[cmdLineArgs.indexOf('-n') + 1]
+    : '10';
 };
 
 const isNotNumber = function(noOfLines) {
@@ -12,9 +12,9 @@ const isNotNumber = function(noOfLines) {
 };
 
 const getInvalidOptions = function(cmdLineArgs) {
-  const options = cmdLineArgs.filter(option => option.slice(0, 1) == "-");
+  const options = cmdLineArgs.filter(option => option.startsWith('-'));
   const invalidOptions = options.filter(option => {
-    const validOptions = ["-n"];
+    const validOptions = ['-n'];
     return !validOptions.includes(option);
   });
   return invalidOptions;
@@ -22,8 +22,10 @@ const getInvalidOptions = function(cmdLineArgs) {
 
 const validateInput = function(cmdLineArgs) {
   const invalidOptions = getInvalidOptions(cmdLineArgs);
-  if (invalidOptions.length != 0)
-    return errorMsg.invalidOption(invalidOptions[0]);
+  if (invalidOptions.length){
+    const [invalidOption] =invalidOptions;
+    return errorMsg.invalidOption(invalidOption);
+  }
   const noOfLines = getNoOfLines(cmdLineArgs);
   if (isNotNumber(noOfLines)) {
     return errorMsg.illegalCount(noOfLines);
@@ -32,20 +34,21 @@ const validateInput = function(cmdLineArgs) {
 };
 
 const isLastLineEmpty = function(lines) {
-  return lines[lines.length - 1] == "";
+  return lines[lines.length - 1] === '';
 };
 
 const selectLastNLines = function(content, noOfLines) {
-  const splitLines = content.split("\n");
-  const numberOfLines = +noOfLines;
-  if (isLastLineEmpty(splitLines)) {
-    splitLines.pop();
+  const lines = content.split('\n');
+  let numberOfLines = +noOfLines;
+  let linesToSlice = -numberOfLines;
+  if (isLastLineEmpty(lines)) {
+    lines.pop();
   }
-  let lastNLines = splitLines.slice(-numberOfLines);
-  if (noOfLines.startsWith("+")) {
-    lastNLines = splitLines.slice(numberOfLines - 1);
+  if (noOfLines.startsWith('+')) {
+    linesToSlice = --numberOfLines;
   }
-  return lastNLines.join("\n");
+  const lastNLines = lines.slice(linesToSlice);
+  return lastNLines.join('\n');
 };
 
 module.exports = {

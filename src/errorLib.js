@@ -7,12 +7,12 @@ const invalidOption = function(option) {
     error: `tail: illegal option -- ${option.slice(
       1
     )}\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]`,
-    output: ""
+    output: ''
   };
 };
 
 const illegalCount = function(count) {
-  return { error: `tail: illegal offset -- ${count}`, output: "" };
+  return { error: `tail: illegal offset -- ${count}`, output: ''};
 };
 
 module.exports = { fileNotExists, invalidOption, illegalCount };
