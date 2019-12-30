@@ -1,62 +1,32 @@
-const eventEmitter = require('events');
-const {
-  performTail,
-  parseOptions,
-  loadFile,
-  readStdin
-} = require('../src/performAction');
+const {stub, spy, restore} = require('sinon');
+const {performTail, parseOptions, readStdin} = require('../src/performAction');
 const assert = require('chai').assert;
 
-describe('loadFile', function() {
-  it('should load the content of given file', function() {
-    const userOptions = { filePath: 'path', noOfLines: '10' };
-    const reader = function(filePath, encoding, callback) {
-      assert.strictEqual(filePath, 'path');
-      assert.strictEqual(encoding, 'utf8');
-      callback(null, 'h\nhow\nare');
-    };
-    const displayMsg = function(message) {
-      assert.deepStrictEqual(message.output, 'h\nhow\nare');
-      assert.deepStrictEqual(message.error, '');
-    };
-    loadFile(userOptions, reader, displayMsg);
-  });
-
-  it('should give error if the file is not present', function() {
-    const userOptions = { filePath: 'path', noOfLines: '10' };
-    const reader = function(filePath, encoding, callback) {
-      assert.strictEqual(filePath, 'path');
-      assert.strictEqual(encoding, 'utf8');
-      callback('err', null);
-    };
-    const displayMsg = function(message) {
-      assert.strictEqual(message.output, '');
-      assert.strictEqual(
-        message.error,
-        `tail: ${userOptions.filePath}: No such file or directory`
-      );
-    };
-    loadFile(userOptions, reader, displayMsg);
-  });
-});
-
 describe('readStdin', function() {
+  afterEach(() => {
+    restore();
+  });
   it('should give the last 10 lines of the standard input', function() {
-    const noOfLines = '1';
-    let flag = false;
-    const displayMsg = function(contentToPrint) {
-      flag = true;
-      assert.deepStrictEqual(contentToPrint, {error: '', output: 'john'});
-    };
-    const stream = new eventEmitter();
-    readStdin(stream, displayMsg, noOfLines);
-    stream.emit('data', 'john');
-    stream.emit('end', '');
-    assert.isTrue(flag);
+    const displayMsg = spy();
+    const stream ={};
+    stream.setEncoding = spy();
+    const eventHandlers ={ data: '', end: ''};
+    stream.on = stub((name, callback) => {
+      eventHandlers[name] = callback;
+    });
+    readStdin(stream, displayMsg, '10');
+    eventHandlers.data('john');
+    eventHandlers.end();
+    assert(stream.setEncoding.calledWith('utf8'));
+    assert(displayMsg.calledWith({error: '', output: 'john'}));
   });
 });
 
 describe('performTail', function() {
+  afterEach(() => {
+    restore();
+  });
+
   it('should perform tail operation if given file is present', function() {
     const userOptions = ['path'];
     const reader = function(filePath, encoding, callback) {
@@ -64,28 +34,22 @@ describe('performTail', function() {
       assert.strictEqual(encoding, 'utf8');
       callback(null, 'hi');
     };
-    const displayMsg = function(message) {
-      assert.deepStrictEqual(message.output, 'hi');
-      assert.strictEqual(message.error, '');
-    };
+    const displayMsg = spy();
     performTail(userOptions, null, reader, displayMsg);
+    assert(displayMsg.calledWith({error: '', output: 'hi'}));
   });
 
-  it('should perform tail operation if given file is present', function() {
+  it('should give error if the file does not exists', function() {
     const userOptions = ['path'];
     const reader = function(filePath, encoding, callback) {
       assert.strictEqual(filePath, 'path');
       assert.strictEqual(encoding, 'utf8');
       callback('err', null);
     };
-    const displayMsg = function(message) {
-      assert.strictEqual(message.output, '');
-      assert.strictEqual(
-        message.error,
-        'tail: path: No such file or directory'
-      );
-    };
+    const displayMsg = spy();
     performTail(userOptions, null, reader, displayMsg);
+    const contentToPrint = {error: 'tail: path: No such file or directory', output: ''};
+    assert(displayMsg.calledWith(contentToPrint));
   });
 
   it('should give error when option is not valid', function() {
@@ -111,28 +75,26 @@ describe('performTail', function() {
       assert.strictEqual(encoding, 'utf8');
       callback('err', null);
     };
-    const displayMsg = function(message) {
-      assert.strictEqual(message.output, '');
-      assert.strictEqual(message.error, 'tail: illegal offset -- r');
-    };
+    const displayMsg = spy();
     performTail(userOptions, null, reader, displayMsg);
+    const contentToPrint = {error: 'tail: illegal offset -- r', output: ''};
+    assert(displayMsg.calledWith(contentToPrint));
   });
 
   it('should give last 10 lines of stdin if lines is not specified', function() {
-    const userOptions = [];
-    let flag= false;
-    const stream = new eventEmitter();
-    const displayMsg = function(message) {
-      flag = true;
-      assert.strictEqual(message.output, 'hello');
-      assert.strictEqual(message.error, '');
-    };
-    performTail(userOptions, stream, null,  displayMsg);
-    stream.emit('data', 'hello');
-    stream.emit('end');
-    assert.isTrue(flag);
+    const displayMsg = spy();
+    const stream ={};
+    stream.setEncoding = spy();
+    const callBacks ={ data: '', end: ''};
+    stream.on = stub((name, callback) => {
+      callBacks[name] = callback;
+    });
+    performTail([], stream, null, displayMsg);
+    callBacks.data('john');
+    callBacks.end();
+    assert(stream.setEncoding.calledWith('utf8'));
+    assert(displayMsg.calledWith({error: '', output: 'john'}));
   });
-  
 });
 
 describe('parseOptions', function() {

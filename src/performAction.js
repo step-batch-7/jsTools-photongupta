@@ -1,7 +1,7 @@
 const errorMsg = require('./errorLib');
 const { selectLastNLines, getNoOfLines, validateInput } = require('./tailLib');
 
-const loadFile = function(parsedOptions, readFile, displayMsg) {
+const loadFile = function(parsedOptions, readFile, onCompletion) {
   const { filePath, noOfLines } = parsedOptions;
   const contentToPrint = { error: '', output: '' };
   readFile(filePath, 'utf8', (err, content) => {
@@ -11,19 +11,20 @@ const loadFile = function(parsedOptions, readFile, displayMsg) {
     else {
       contentToPrint.output = selectLastNLines(content, noOfLines);
     }
-    return displayMsg(contentToPrint);
+    return onCompletion(contentToPrint);
   });
 };
 
-const readStdin = function(stdin, displayMsg, noOfLines) {
+const readStdin = function(stdin, onCompletion, noOfLines) {
+  stdin.setEncoding('utf8');
   const contentToPrint = { error: '', output: '' };
   let content = '';
-  stdin.on('data', data => {
+  stdin.on('data', ( data) => {
     content += data;
   });
   stdin.on('end', () => {
     contentToPrint.output = selectLastNLines(content, noOfLines);
-    displayMsg(contentToPrint);
+    onCompletion(contentToPrint);
   });
 };
 
@@ -36,18 +37,18 @@ const parseOptions = function(userOptions) {
   return parsedOptions;
 };
 
-const performTail = function(cmdLineArgs, stdin, readFile, displayMsg) {
+const performTail = function(cmdLineArgs, stdin, readFile, onCompletion) {
   const validationMsg = validateInput(cmdLineArgs);
   const parsedOptions = parseOptions(cmdLineArgs);
   if (validationMsg.error) {
-    return displayMsg(validationMsg);
+    return onCompletion(validationMsg);
   }
   if (parsedOptions.filePath === undefined) {
-    readStdin(stdin, displayMsg, parsedOptions.noOfLines);
+    readStdin(stdin, onCompletion, parsedOptions.noOfLines);
     return;
   }
-  loadFile(parsedOptions, readFile, displayMsg);
+  loadFile(parsedOptions, readFile, onCompletion);
 };
 
 
-module.exports = { performTail, parseOptions, loadFile, readStdin };
+module.exports = { performTail, parseOptions,  readStdin };
