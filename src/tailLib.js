@@ -2,12 +2,13 @@
 const errorMsg = require('./errorLib');
 
 const getLinesAndFilePath = function(cmdLineArgs) {
-  const indexOfN = cmdLineArgs.indexOf('-n');
+  const firstIndex = 0;
   let noOfLines = '10';
-  let filePath = cmdLineArgs[0];
+  let filePath = cmdLineArgs[firstIndex];
   if(cmdLineArgs.includes('-n')){
-    noOfLines = cmdLineArgs[indexOfN + 1];
-    filePath = cmdLineArgs[indexOfN + 2];
+    let indexOfN = cmdLineArgs.indexOf('-n');
+    noOfLines = cmdLineArgs[++indexOfN];
+    filePath = cmdLineArgs[++indexOfN];
   }
   return [noOfLines, filePath];
 };

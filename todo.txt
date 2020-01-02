@@ -77,7 +77,7 @@ Inputs--
 
 --done--find out the way to test the stdin
 
---done--implement loadFromStdinput
+--done--implement loadFromStdin
        (Note- reading standard input)
        
 --done--avoid the use of magic numbers

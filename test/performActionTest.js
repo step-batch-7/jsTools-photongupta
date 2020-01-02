@@ -66,7 +66,6 @@ describe('performTail', function() {
     assert.strictEqual(readFile.firstCall.args[0], 'path');
     assert.strictEqual(readFile.firstCall.args[1], 'utf8');
     readFile.firstCall.args[2]('err', null);
-
   });
 
   it('should give error when option is invalid', (done) => {
@@ -111,7 +110,6 @@ describe('performTail', function() {
     assert.strictEqual(stream.on.callCount, 2);
     stream.on.firstCall.args[1]('a\nb\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10');
     stream.on.secondCall.args[1]();    
-   
   });
 
   it('should give all lines of stdin for less than N lines', (done) => {
@@ -127,7 +125,6 @@ describe('performTail', function() {
     assert.strictEqual(stream.on.callCount, 2);
     stream.on.firstCall.args[1]('a\nb\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10');
     stream.on.secondCall.args[1]();    
-   
   });
 
   it('should give last N lines of stdin', (done) => {
@@ -143,7 +140,6 @@ describe('performTail', function() {
     assert.strictEqual(stream.on.callCount, 2);
     stream.on.firstCall.args[1]('John\nrohan\nrita');
     stream.on.secondCall.args[1]();    
-   
   });
 
   it('should give all lines of except initial N of stdin if option has plus sign', (done) => {
@@ -159,22 +155,5 @@ describe('performTail', function() {
     assert.strictEqual(stream.on.callCount, 2);
     stream.on.firstCall.args[1]('John\nrohan\nrita');
     stream.on.secondCall.args[1]();    
-   
   });
 });
-
-// describe('parseOptions', function() {
-//   it('should filePath, no. of lines even if option is not given', function() {
-//     assert.deepStrictEqual(parseOptions(['a.txt']), {
-//       filePath: 'a.txt',
-//       noOfLines: '10'
-//     });
-//   });
-
-//   it('should give the object containing filePath, no. of lines ', function() {
-//     assert.deepStrictEqual(parseOptions(['-n', '3', 'a.txt']), {
-//       filePath: 'a.txt',
-//       noOfLines: '3'
-//     });
-//   });
-// });
