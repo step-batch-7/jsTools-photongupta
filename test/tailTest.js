@@ -1,5 +1,5 @@
 const assert = require('chai').assert;
-const { selectLastNLines, validateInput } = require('../src/tailLib');
+const {selectLastNLines, parseOptions} = require('../src/tailLib');
 
 describe('selectLastNLines', function() {
   it('should give array of last 10 lines of the given content', function() {
@@ -24,27 +24,29 @@ describe('selectLastNLines', function() {
   });
 });
 
-describe('validateInput', function() {
+describe('parseOptions', function() {
   it('should give object containing error if options are invalid', function() {
     const cmdLineArgs = ['node', 'tail.js', '-e', 'a.txt'];
     const error = 'tail: illegal option -- e\nusage: ';
     const usages = 'tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]';
-    assert.deepStrictEqual(validateInput(cmdLineArgs), {
-      error: `${error}${usages}`, output: ''});
+    assert.deepStrictEqual(parseOptions(cmdLineArgs), {
+      error: {error: `${error}${usages}`, output: ''}});
   });
 
   it('should give an error if argument of -n option in not valid', function() {
     const cmdLineArgs = ['node', 'tail.js', '-n', 'r', 'a.txt'];
-    assert.deepStrictEqual(validateInput(cmdLineArgs), {
-      error: 'tail: illegal offset -- r',
-      output: ''
-    });
+    assert.deepStrictEqual(parseOptions(cmdLineArgs), {
+      error: {error: 'tail: illegal offset -- r',
+        output: ''
+      }});
   });
 
   it('should give an object containing null if the input is valid', function() {
     const cmdLineArgs = ['node', 'tail.js', '-n', '3', 'a.txt'];
-    assert.deepStrictEqual(validateInput(cmdLineArgs), {
-      error: null
+    assert.deepStrictEqual(parseOptions(cmdLineArgs), {
+      error: null,
+      noOfLines: '3',
+      filePath: 'a.txt'
     });
   });
 });

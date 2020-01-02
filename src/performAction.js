@@ -1,8 +1,8 @@
+'use strict';
 const errorMsg = require('./errorLib');
-const {selectLastNLines, getNoOfLines, validateInput, getFilePath} = require('./tailLib');
+const {selectLastNLines, parseOptions} = require('./tailLib');
 
-const loadFile = function(parsedOptions, readFile, onCompletion) {
-  const {filePath, noOfLines} = parsedOptions;
+const loadFile = function(filePath, noOfLines, readFile, onCompletion) {
   const contentToPrint = {error: '', output: ''};
   readFile(filePath, 'utf8', (err, content) => {
     if (err) {
@@ -15,7 +15,7 @@ const loadFile = function(parsedOptions, readFile, onCompletion) {
   });
 };
 
-const readStdin = function(stdin, onCompletion, noOfLines) {
+const loadFromStdin = function(stdin, onCompletion, noOfLines) {
   stdin.setEncoding('utf8');
   const contentToPrint = {error: '', output: ''};
   let content = '';
@@ -28,26 +28,17 @@ const readStdin = function(stdin, onCompletion, noOfLines) {
   });
 };
 
-const parseOptions = function(userOptions) {
-  // const {length} = userOptions;
-  const parsedOptions = {
-    filePath: getFilePath(userOptions),
-    noOfLines: getNoOfLines(userOptions)
-  };
-  return parsedOptions;
-};
-
-const performTail = function(cmdLineArgs, {stdin, readFile}, onCompletion) {
-  const validationMsg = validateInput(cmdLineArgs);
-  const parsedOptions = parseOptions(cmdLineArgs);
-  if (validationMsg.error) {
-    return onCompletion(validationMsg);
+const performTail = function(cmdLineArgs, contentLoader, onCompletion) {
+  const {stdin, readFile} = contentLoader;
+  const {error, noOfLines, filePath} = parseOptions(cmdLineArgs);
+  if (error) {
+    return onCompletion(error);
   }
-  if (parsedOptions.filePath === undefined) {
-    readStdin(stdin, onCompletion, parsedOptions.noOfLines);
+  if (filePath === undefined) {
+    loadFromStdin(stdin, onCompletion, noOfLines);
     return;
   }
-  loadFile(parsedOptions, readFile, onCompletion);
+  loadFile(filePath, noOfLines, readFile, onCompletion);
 };
 
-module.exports = {performTail, parseOptions, readStdin};
+module.exports = {performTail, loadFromStdin};

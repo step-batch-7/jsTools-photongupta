@@ -77,14 +77,14 @@ Inputs--
 
 --done--find out the way to test the stdin
 
---done--implement readStdInput
+--done--implement loadFromStdinput
        (Note- reading standard input)
        
 --done--avoid the use of magic numbers
 
 =>avoid more than four parameters in the function
 
-=>refactor readStdin and loadFile functions
+=>refactor loadFromStdin and loadFile functions
 
 =>Modify performTail function
 

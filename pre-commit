@@ -1,0 +1,5 @@
+npm test 
+if [ $? != 0 ];then 
+  echo "Fix the test first"
+  exit 1
+fi

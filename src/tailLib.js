@@ -1,18 +1,19 @@
 'use strict';
 const errorMsg = require('./errorLib');
 
-const getNoOfLines = function(cmdLineArgs) {
-  let indexOfN = cmdLineArgs.indexOf('-n');
-  return cmdLineArgs.includes('-n') ? cmdLineArgs[++indexOfN] : '10';
-};
-
-const getFilePath = function(cmdLineArgs) {
+const getLinesAndFilePath = function(cmdLineArgs) {
   const indexOfN = cmdLineArgs.indexOf('-n');
-  return cmdLineArgs.includes('-n') ? cmdLineArgs[indexOfN + 2] : cmdLineArgs[0];
+  let noOfLines = '10';
+  let filePath = cmdLineArgs[0];
+  if(cmdLineArgs.includes('-n')){
+    noOfLines = cmdLineArgs[indexOfN + 1];
+    filePath = cmdLineArgs[indexOfN + 2];
+  }
+  return [noOfLines, filePath];
 };
 
-const isNotNumber = function(noOfLines) {
-  return !Number.isInteger(+noOfLines);
+const isNumber = function(noOfLines) {
+  return Number.isInteger(+noOfLines);
 };
 
 const getInvalidOptions = function(cmdLineArgs){
@@ -24,17 +25,17 @@ const getInvalidOptions = function(cmdLineArgs){
   return invalidOptions;
 };
 
-const validateInput = function(cmdLineArgs) {
+const parseOptions = function(cmdLineArgs) {
   const invalidOptions = getInvalidOptions(cmdLineArgs);
   if (invalidOptions.length){
     const [invalidOption] = invalidOptions;
-    return errorMsg.invalidOption(invalidOption);
+    return {error: errorMsg.invalidOption(invalidOption)};
   }
-  const noOfLines = getNoOfLines(cmdLineArgs);
-  if (isNotNumber(noOfLines)) {
-    return errorMsg.illegalCount(noOfLines);
+  const [noOfLines, filePath] = getLinesAndFilePath(cmdLineArgs);
+  if (!isNumber(noOfLines)) {
+    return {error: errorMsg.illegalCount(noOfLines)};
   }
-  return {error: null};
+  return {error: null, noOfLines, filePath};
 };
 
 const isLastLineEmpty = function(lines) {
@@ -57,8 +58,7 @@ const selectLastNLines = function(content, noOfLines) {
 };
 
 module.exports = {
-  getNoOfLines,
-  validateInput,
+  parseOptions,
   selectLastNLines,
-  getFilePath
+  getLinesAndFilePath
 };
