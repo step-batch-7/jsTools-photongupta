@@ -67,11 +67,11 @@ B.Third flow =>if content is given by the command line
 
 Inputs--
 ✅1.node tail.js 
-✅3.cat a.txt | node tail.js 
-2.node tail.js -n 1
-4.cat a.txt | node tail.js -n 1
-5.node tail.js -n +1
-6.cat a.txt | node tail.js -n +1
+✅2.cat a.txt | node tail.js 
+✅3.node tail.js -n 1
+✅4.cat a.txt | node tail.js -n 1
+✅5.node tail.js -n +1
+✅6.cat a.txt | node tail.js -n +1
 
 --done--find out how to write appTests
 

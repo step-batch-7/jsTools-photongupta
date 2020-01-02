@@ -1,5 +1,5 @@
 const errorMsg = require('./errorLib');
-const {selectLastNLines, getNoOfLines, validateInput} = require('./tailLib');
+const {selectLastNLines, getNoOfLines, validateInput, getFilePath} = require('./tailLib');
 
 const loadFile = function(parsedOptions, readFile, onCompletion) {
   const {filePath, noOfLines} = parsedOptions;
@@ -29,9 +29,9 @@ const readStdin = function(stdin, onCompletion, noOfLines) {
 };
 
 const parseOptions = function(userOptions) {
-  let {length} = userOptions;
+  // const {length} = userOptions;
   const parsedOptions = {
-    filePath: userOptions[ --length ],
+    filePath: getFilePath(userOptions),
     noOfLines: getNoOfLines(userOptions)
   };
   return parsedOptions;

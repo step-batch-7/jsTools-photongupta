@@ -6,6 +6,11 @@ const getNoOfLines = function(cmdLineArgs) {
   return cmdLineArgs.includes('-n') ? cmdLineArgs[++indexOfN] : '10';
 };
 
+const getFilePath = function(cmdLineArgs) {
+  const indexOfN = cmdLineArgs.indexOf('-n');
+  return cmdLineArgs.includes('-n') ? cmdLineArgs[indexOfN + 2] : cmdLineArgs[0];
+};
+
 const isNotNumber = function(noOfLines) {
   return !Number.isInteger(+noOfLines);
 };
@@ -54,5 +59,6 @@ const selectLastNLines = function(content, noOfLines) {
 module.exports = {
   getNoOfLines,
   validateInput,
-  selectLastNLines
+  selectLastNLines,
+  getFilePath
 };
