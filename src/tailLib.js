@@ -2,16 +2,15 @@
 const errorMsg = require('./errorLib');
 
 const getNoOfLines = function(cmdLineArgs) {
-  return cmdLineArgs.includes('-n')
-    ? cmdLineArgs[cmdLineArgs.indexOf('-n') + 1]
-    : '10';
+  let indexOfN = cmdLineArgs.indexOf('-n');
+  return cmdLineArgs.includes('-n') ? cmdLineArgs[++indexOfN] : '10';
 };
 
 const isNotNumber = function(noOfLines) {
   return !Number.isInteger(+noOfLines);
 };
 
-const getInvalidOptions = function(cmdLineArgs) {
+const getInvalidOptions = function(cmdLineArgs){
   const options = cmdLineArgs.filter(option => option.startsWith('-'));
   const invalidOptions = options.filter(option => {
     const validOptions = ['-n'];
@@ -23,18 +22,19 @@ const getInvalidOptions = function(cmdLineArgs) {
 const validateInput = function(cmdLineArgs) {
   const invalidOptions = getInvalidOptions(cmdLineArgs);
   if (invalidOptions.length){
-    const [invalidOption] =invalidOptions;
+    const [invalidOption] = invalidOptions;
     return errorMsg.invalidOption(invalidOption);
   }
   const noOfLines = getNoOfLines(cmdLineArgs);
   if (isNotNumber(noOfLines)) {
     return errorMsg.illegalCount(noOfLines);
   }
-  return { error: null };
+  return {error: null};
 };
 
 const isLastLineEmpty = function(lines) {
-  return lines[lines.length - 1] === '';
+  let length = lines.length;
+  return lines[--length] === '';
 };
 
 const selectLastNLines = function(content, noOfLines) {

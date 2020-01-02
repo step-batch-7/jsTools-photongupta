@@ -1,9 +1,9 @@
 const errorMsg = require('./errorLib');
-const { selectLastNLines, getNoOfLines, validateInput } = require('./tailLib');
+const {selectLastNLines, getNoOfLines, validateInput} = require('./tailLib');
 
 const loadFile = function(parsedOptions, readFile, onCompletion) {
-  const { filePath, noOfLines } = parsedOptions;
-  const contentToPrint = { error: '', output: '' };
+  const {filePath, noOfLines} = parsedOptions;
+  const contentToPrint = {error: '', output: ''};
   readFile(filePath, 'utf8', (err, content) => {
     if (err) {
       contentToPrint.error = errorMsg.fileNotExists(filePath);
@@ -17,7 +17,7 @@ const loadFile = function(parsedOptions, readFile, onCompletion) {
 
 const readStdin = function(stdin, onCompletion, noOfLines) {
   stdin.setEncoding('utf8');
-  const contentToPrint = { error: '', output: '' };
+  const contentToPrint = {error: '', output: ''};
   let content = '';
   stdin.on('data', ( data) => {
     content += data;
@@ -29,7 +29,7 @@ const readStdin = function(stdin, onCompletion, noOfLines) {
 };
 
 const parseOptions = function(userOptions) {
-  let { length } = userOptions;
+  let {length} = userOptions;
   const parsedOptions = {
     filePath: userOptions[ --length ],
     noOfLines: getNoOfLines(userOptions)
@@ -37,7 +37,7 @@ const parseOptions = function(userOptions) {
   return parsedOptions;
 };
 
-const performTail = function(cmdLineArgs, stdin, readFile, onCompletion) {
+const performTail = function(cmdLineArgs, {stdin, readFile}, onCompletion) {
   const validationMsg = validateInput(cmdLineArgs);
   const parsedOptions = parseOptions(cmdLineArgs);
   if (validationMsg.error) {
@@ -50,5 +50,4 @@ const performTail = function(cmdLineArgs, stdin, readFile, onCompletion) {
   loadFile(parsedOptions, readFile, onCompletion);
 };
 
-
-module.exports = { performTail, parseOptions,  readStdin };
+module.exports = {performTail, parseOptions, readStdin};

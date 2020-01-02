@@ -79,6 +79,10 @@ Inputs--
 
 --done--implement readStdInput
        (Note- reading standard input)
+       
+--done--avoid the use of magic numbers
+
+=>avoid more than four parameters in the function
 
 =>refactor readStdin and loadFile functions
 

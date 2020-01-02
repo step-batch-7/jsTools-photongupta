@@ -3,16 +3,15 @@ const fileNotExists = function(fileName) {
 };
 
 const invalidOption = function(option) {
-  return {
-    error: `tail: illegal option -- ${option.slice(
-      1
-    )}\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]`,
-    output: ''
-  };
+  const sliceFrom = 1;
+  const invalidOption = option.slice(sliceFrom);
+  const errorMsg = `tail: illegal option -- ${invalidOption}`;
+  const usage = ' tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]';
+  return {error: `${errorMsg}\nusage:${usage}`, output: ''};
 };
 
 const illegalCount = function(count) {
-  return { error: `tail: illegal offset -- ${count}`, output: ''};
+  return {error: `tail: illegal offset -- ${count}`, output: ''};
 };
 
-module.exports = { fileNotExists, invalidOption, illegalCount };
+module.exports = {fileNotExists, invalidOption, illegalCount};

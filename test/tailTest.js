@@ -16,7 +16,7 @@ describe('selectLastNLines', function() {
     assert.deepStrictEqual(selectLastNLines(content, noOfLines), expected);
   });
 
-  it('should give all lines except given head lines if option contains + sign', function() {
+  it('should give all lines except given top lines if option has +', () => {
     const content = 'c\nd\ne\nf\n';
     const noOfLines = '+10';
     const expected = '';
